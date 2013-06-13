@@ -25,8 +25,9 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	private Coor cell;	//celda actual
 	public Coor publicCell = cell;	//copia de cell publica para que el sistema de debug y otras clases puedan acceder en tiempo real a la variable sin necesidad de un metodo
 	Coor[][] map;	//mapa actual
-	private int MaxMapX = 800;	//maximo tamaño horizontal del mapa actual PIXELES
-	private int MaxMapY = 800;	//maximo tamaño vertical del mapa actual PIXELES
+	Mapper map2;
+	int MaxMapX = 800;	//maximo tamaño horizontal del mapa actual PIXELES
+	int MaxMapY = 800;	//maximo tamaño vertical del mapa actual PIXELES
 	private static final int MOVEMENT_SPEED = 300;	//velocidad del movimiento (solo pasos, el movimiento de renderizado es otra cosa)
 	private static final int RENDER_SPEED = 5;	//velocidad de renderizado(velocidad de refresco de la pantalla y todas las acciones que implica un frame)
 	private Image bardejov;	//imagen del personaje main (no preguntes por el nombre)
@@ -48,7 +49,8 @@ public class Board extends JPanel implements Runnable, ActionListener{
 		}*/
 	
 	    public Board() {
-	    	map = new Mapper(MaxMapX,MaxMapY).init();	//mapeo
+	    	map2 = new Mapper(MaxMapX,MaxMapY,this);	//mapeo
+	    	map = map2.init();
 	    	setDoubleBuffered(true);	//se requiere un buffer de dibujo el cual se dibuja finalmente en pantalla (cuestiones menores de refresco de pantalla)
 	        ImageIcon ii = new ImageIcon("abajo_quieto.png");	//inicializacion de imagenes
 	        bardejov = ii.getImage();
@@ -57,7 +59,6 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	        ImageIcon iii = new ImageIcon("ff.jpg");
 	        background = iii.getImage();
 	        cell = map[o][p];	//inicializacion de celda actual (si el DebugSystem lanza errores posiblemente es porque se inicia antes que esto(muy improbable))
-	        map[2][2].setAllow(false);	//prubea de colision en celda [2][2] (sin problemas)
 	    }
 	    
 	    

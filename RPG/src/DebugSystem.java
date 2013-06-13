@@ -1,7 +1,6 @@
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -38,12 +37,21 @@ public class DebugSystem extends JFrame implements ActionListener{
 			JOptionPane.showMessageDialog(null, e + " " + i + " " + a.map[i][e].toString());
 		}catch(Exception e2){
 			JOptionPane.showMessageDialog(null, e2.toString());
-		}
-		
+		}	
 	}
+	
+	public void change_cell_state(int x, int y){
+		int i = JOptionPane.showConfirmDialog(null, "El estado de la celda [" + x + "][" + y + "] es: " + a.map[x][y].isAllow() + "\n Quiere cambiarlo?");
+		if(i == 0){
+			a.map[x][y].setAllow(!a.map[x][y].isAllow());
+		}
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		b.setText("Pixels: " + a.publicCell.toString());		//muestra en el Debug System los pixeles en los que se encuentra el centro de camara
 		c.setText("Cell: [" + a.public_o + "] [" + a.public_p + "]");	//igual que el anterior pero con el numero de celda			//debug method: comprueba que Mapper funciona correctamente
 	}
 }
+
+	

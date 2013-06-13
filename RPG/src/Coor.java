@@ -1,5 +1,7 @@
+
+
 //Esta clase representa una celda
-public class Coor {
+public class Coor{
 	private int X,Y;
 	private boolean allow = true;
 	private boolean offsetR = false, offsetL = false, offsetD = false, offsetU = false;
@@ -15,6 +17,22 @@ public class Coor {
 	
 	public int X(){
 		return X;
+	}
+	
+	public boolean are_these_pixels_from_this_coorX(int x){
+		if(x >= X && x < X+14){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	public boolean are_these_pixels_from_this_coorY(int y){
+		if(y >= Y && y < Y+14){
+			return true;
+		}else{
+			return false;
+		}
 	}
 	
 	public int Y(){
@@ -90,5 +108,4 @@ public class Coor {
 			offsetD = false;
 		}
 	}
-
 }

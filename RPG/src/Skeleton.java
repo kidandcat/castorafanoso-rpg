@@ -3,6 +3,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 @SuppressWarnings("serial")
 public class Skeleton extends JFrame implements KeyListener {
@@ -52,6 +53,11 @@ public class Skeleton extends JFrame implements KeyListener {
 		}
 		if(arg0.getKeyCode() == KeyEvent.VK_M){
 			db.print_map();
+		}
+		if(arg0.getKeyCode() == KeyEvent.VK_N){
+			int x = Integer.parseInt(JOptionPane.showInputDialog("X:"));
+			int y = Integer.parseInt(JOptionPane.showInputDialog("Y:"));
+			db.change_cell_state(x, y);
 		}
 	}
 	@Override
