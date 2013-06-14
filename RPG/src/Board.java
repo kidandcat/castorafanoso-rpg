@@ -26,8 +26,10 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	public Coor publicCell = cell;	//copia de cell publica para que el sistema de debug y otras clases puedan acceder en tiempo real a la variable sin necesidad de un metodo
 	Coor[][] map;	//mapa actual
 	Mapper map2;
-	int MaxMapX = 800;	//maximo tamaño horizontal del mapa actual PIXELES
-	int MaxMapY = 800;	//maximo tamaño vertical del mapa actual PIXELES
+	private int MaxMapX = 800;	//maximo tamaño horizontal del mapa actual PIXELES
+	private int MaxMapY = 800;	//maximo tamaño vertical del mapa actual PIXELES
+	int public_MaxMapX;
+	int public_MaxMapY;
 	private static final int MOVEMENT_SPEED = 300;	//velocidad del movimiento (solo pasos, el movimiento de renderizado es otra cosa)
 	private static final int RENDER_SPEED = 5;	//velocidad de renderizado(velocidad de refresco de la pantalla y todas las acciones que implica un frame)
 	private Image bardejov;	//imagen del personaje main (no preguntes por el nombre)
@@ -284,6 +286,8 @@ public class Board extends JPanel implements Runnable, ActionListener{
 				publicCell = cell;	//actualizacion de variables publicas
 				public_o = o;
 				public_p = p;
+				public_MaxMapX = MaxMapX;
+				public_MaxMapY = MaxMapY;
 				repaint();
 				timeDiff = System.currentTimeMillis() - beforeTime;	//calculo del tiempo perdido ejecutando metodos
 	            sleep = RENDER_SPEED - timeDiff;	//calculo del tiempo a esperar

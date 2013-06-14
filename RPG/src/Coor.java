@@ -19,6 +19,7 @@ public class Coor{
 		return X;
 	}
 	
+	/*
 	public boolean are_these_pixels_from_this_coorX(int x){
 		if(x >= X && x < X+14){
 			return true;
@@ -34,7 +35,7 @@ public class Coor{
 			return false;
 		}
 	}
-	
+	*/
 	public int Y(){
 		return Y;
 	}

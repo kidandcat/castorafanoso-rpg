@@ -1,4 +1,4 @@
-import javax.swing.JOptionPane;
+
 
 /*
 	Esta clase se encarga de crear un mapa de coordenadas tras asignarle un tamaño en pixeles.
@@ -10,20 +10,20 @@ public class Mapper {
 	private static final int cellPixels = 14; //do not change!!
 	private Coor[][] map;
 	private int X,Y;
-	private Board a;
+	//private Board a;
 	
 	public Mapper(int x, int y, Board a){
 		this.X = x;
 		this.Y = y;
 		map = new Coor[(X/cellPixels)+1][(Y/cellPixels)+1];
-		this.a = a;
+		//this.a = a;
 	}
 	
-	public Coor isCoor(int x, int y){
+	/*public Coor isCoor(int x, int y){
 		Coor b = null;
 		int z = 0,v = 0;
-		for(int i = 0; i < a.MaxMapX/cellPixels; i++){
-			for(int e = 0; e < a.MaxMapY/cellPixels; e++){
+		for(int i = 0; i < a.public_MaxMapX/cellPixels; i++){
+			for(int e = 0; e < a.public_MaxMapY/cellPixels; e++){
 				if(map[i][e].are_these_pixels_from_this_coorX(x)){
 					JOptionPane.showMessageDialog(null, "Celda encontrada");
 					z = i;
@@ -34,7 +34,7 @@ public class Mapper {
 		
 		b = new Coor(z,v);
 		return b;
-	}
+	}*/
 	
 	public Coor[][] init(){
 		for(int i = 0; i < X/cellPixels; i++){
