@@ -15,6 +15,10 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.TreeMap;
+
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -32,8 +36,6 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	int public_MaxMapY;
 	private static final int MOVEMENT_SPEED = 300;	//velocidad del movimiento (solo pasos, el movimiento de renderizado es otra cosa)
 	private static final int RENDER_SPEED = 5;	//velocidad de renderizado(velocidad de refresco de la pantalla y todas las acciones que implica un frame)
-	private Image bardejov;	//imagen del personaje main (no preguntes por el nombre)
-	private Image background, bosque;	//mas imagenes (ahora mismo uso dos backgrounds)
 	private int anim = 0;	//variable para animacion
 	boolean anima = true,animac = true;	//variable para animacion
 	private int o=0,p=0;	//coordenada actual;
@@ -42,7 +44,8 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	//private boolean end;	legacy variable
 	private Thread animator;	//variable Thread para que board pueda autoiniciarse (ver metodo addNotify())
 	private String nextMov = "";	//siguiente movimiento del personaje main
-		
+	private Map<Integer, Image> images;
+	private Map<Integer, Coor> coors;
 	
 	
 	/*METODOS*/
@@ -51,15 +54,18 @@ public class Board extends JPanel implements Runnable, ActionListener{
 		}*/
 	
 	    public Board() {
+	    	images = new TreeMap<Integer, Image>(); 
+	    	coors = new TreeMap<Integer, Coor>(); 
 	    	map2 = new Mapper(MaxMapX,MaxMapY,this);	//mapeo
 	    	map = map2.init();
 	    	setDoubleBuffered(true);	//se requiere un buffer de dibujo el cual se dibuja finalmente en pantalla (cuestiones menores de refresco de pantalla)
-	        ImageIcon ii = new ImageIcon("abajo_quieto.png");	//inicializacion de imagenes
-	        bardejov = ii.getImage();
-	        ImageIcon iiii = new ImageIcon("bosque.png");
-	        bosque = iiii.getImage();
-	        ImageIcon iii = new ImageIcon("ff.jpg");
-	        background = iii.getImage();
+	    	
+	    	/*Cargamos imagenes*/ //IMPORTANTE las ids de las imagenes van de 2 para abajo (pueden ser negativas)
+	    	newImage(2,"ff.jpg", new Coor(420,310));		//anadimos un par de fondos
+	    	newImage(1,"bosque.png", new Coor(-300,-300));
+	    	newImage(3,"abajo_quieto.png", new Coor(0,0));	//las imagenes se superpondran de acuerdo al orden de carga (la ultima por encima de todas)
+	    	
+	    	
 	        cell = map[o][p];	//inicializacion de celda actual (si el DebugSystem lanza errores posiblemente es porque se inicia antes que esto(muy improbable))
 	    }
 	    
@@ -67,9 +73,17 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    
 	    public void paint(Graphics g) {		//pintado de pantalla, este metodo no se ejecuta por nosotros mismos, el sistema de graficos lo ejecuta cada vez que llamamos a repaint()
 	    	Graphics2D g2d = (Graphics2D) g;	//grafico actual
-	    	g2d.drawImage(bosque, cell.X()-300, cell.Y()-300, null);	//dibujado y posicionamiento de imagenes
-	    	g2d.drawImage(background, cell.X()+420, cell.Y()+310, null);
-	        g2d.drawImage(bardejov, 420, 310, null); 
+	    	Iterator<Image> it = images.values().iterator();
+	    	Iterator<Coor> it2 = coors.values().iterator();
+	    	for(int i=0; i<images.size();i++){
+	    		Image a = it.next();
+	    		if(!a.equals(images.get(3))){
+	    			Coor d = it2.next();
+	    			g2d.drawImage(a, cell.X()+d.X(), cell.Y()+d.Y(), null);
+	    		}else{
+	    			g2d.drawImage(a, 420, 310, null);
+	    		}
+	    	}
 	        Toolkit.getDefaultToolkit().sync();		//sincronizacion necesaria para sistemas unix
 	        g.dispose();
 	    }
@@ -119,14 +133,12 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    		Coor evalCell = map[o][p];	//celda de evaluacion
 	    			if(anima){	//turno de la animacion
 	    				if(anim == 0){	//alternando entre paso izquierdo y paso derecho
-	    					ImageIcon ii = new ImageIcon("derecha_andando.png");	//sprite caminando
-	    					bardejov = ii.getImage();
+	    					newImage(3,"derecha_andando.png",new Coor(0,0));
 	    					cell.offsetR();	//offset a la celda actual para efect de paso
 	    					anima = false;	//turno de animacion finalizado
 	    					anim++;
 	    				}else{
-	    					ImageIcon ii = new ImageIcon("derecha_andando2.png");	//sprite caminando
-	    					bardejov = ii.getImage();
+	    					newImage(3,"derecha_andando2.png",new Coor(0,0));
 	    					cell.offsetR();	//offset a la celda actual para efect de paso
 	    					anima = false;	//turno de animacion finalizado
 	    					anim--;
@@ -136,8 +148,7 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    				cell.setAllow(true);	//la desbloqueamos
 	    				this.cell = evalCell;	//avanzamos a la siguiente celda
 	    				cell.setAllow(false);	//la bloqueamos
-	    				ImageIcon ii = new ImageIcon("derecha_quieto.png");		//cambiamos el sprite
-	    				bardejov = ii.getImage();
+	    				newImage(3,"derecha_quieto.png",new Coor(0,0));
 	    				anima = true;	//fin turno de movimiento
 	    			}else{	//si la celda no permite el movimiento a ella
 	    				anima = true;	//fin turno movimiento
@@ -162,14 +173,12 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    			Coor evalCell = map[o][p];
 	    			if(anima){
 	    				if(anim == 0){
-	    					ImageIcon ii = new ImageIcon("izquierda_andando.png");	
-	    					bardejov = ii.getImage();
+	    					newImage(3,"izquierda_andando.png",new Coor(0,0));
 	    					cell.offsetL();
 	    					anima = false;
 	    					anim++;
 	    				}else{
-	    					ImageIcon ii = new ImageIcon("izquierda_andando2.png");	
-	    					bardejov = ii.getImage();
+	    					newImage(3,"izquierda_andando2.png",new Coor(0,0));
 	    					cell.offsetL();
 	    					anima = false;
 	    					anim--;
@@ -179,8 +188,7 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    				cell.setAllow(true);
 	    				this.cell = evalCell;
 	    				cell.setAllow(false);
-	    				ImageIcon ii = new ImageIcon("izquierda_quieto.png");	
-	    				bardejov = ii.getImage();
+	    				newImage(3,"izquierda_quieto.png",new Coor(0,0));
 	    				anima = true;
 	    			}else{
 	    				anima = true;
@@ -205,14 +213,12 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    		Coor evalCell = map[o][p];
     			if(anima){
     				if(anim == 0){
-    					ImageIcon ii = new ImageIcon("arriba_andando.png");	
-    					bardejov = ii.getImage();
+    					newImage(3,"arriba_andando.png",new Coor(0,0));
     					cell.offsetU();
     					anima = false;
     					anim++;
     				}else{
-    					ImageIcon ii = new ImageIcon("arriba_andando2.png");	
-    					bardejov = ii.getImage();
+    					newImage(3,"arriba_andando2.png",new Coor(0,0));
     					cell.offsetU();
     					anima = false;
     					anim--;
@@ -222,8 +228,7 @@ public class Board extends JPanel implements Runnable, ActionListener{
     				cell.setAllow(true);
     				this.cell = evalCell;
     				cell.setAllow(false);
-    				ImageIcon ii = new ImageIcon("arriba_quieto.png");	
-    				bardejov = ii.getImage();
+    				newImage(3,"arriba_quieto.png",new Coor(0,0));
     				anima = true;
     			}else{
     				anima = true;
@@ -248,14 +253,12 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    		Coor evalCell = map[o][p];
     			if(anima){
     				if(anim == 0){
-    					ImageIcon ii = new ImageIcon("abajo_andando.png");	
-    					bardejov = ii.getImage();
+    					newImage(3,"abajo_andando.png",new Coor(0,0));
     					cell.offsetD();
     					anima = false;
     					anim++;
     				}else{
-    					ImageIcon ii = new ImageIcon("abajo_andando2.png");	
-    					bardejov = ii.getImage();
+    					newImage(3,"abajo_andando2.png",new Coor(0,0));
     					cell.offsetD();
     					anima = false;
     					anim--;
@@ -265,8 +268,7 @@ public class Board extends JPanel implements Runnable, ActionListener{
     				cell.setAllow(true);
     				this.cell = evalCell;
     				cell.setAllow(false);
-    				ImageIcon ii = new ImageIcon("abajo_quieto.png");	
-    				bardejov = ii.getImage();
+    				newImage(3,"abajo_quieto.png",new Coor(0,0));
     				anima = true;
     			}else{
     				anima = true;
@@ -277,6 +279,15 @@ public class Board extends JPanel implements Runnable, ActionListener{
     	}
 	    }
 	    
+	    
+	    
+	    
+	    public void newImage(int id, String file, Coor position){
+	    	 ImageIcon a = new ImageIcon(file);
+		     Image b = a.getImage();
+		     images.put(id, b);
+		     coors.put(id, position);
+	    }
 	    
 
 		public void run() {		//loop principal, Frame
