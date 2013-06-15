@@ -15,6 +15,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
@@ -46,7 +47,7 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	private String nextMov = "";	//siguiente movimiento del personaje main
 	private Map<Integer, Image> images;
 	private Map<Integer, Coor> coors;
-	
+	private Npc n;
 	
 	/*METODOS*/
 	/*public synchronized boolean isEnd(){	legacy method
@@ -54,8 +55,8 @@ public class Board extends JPanel implements Runnable, ActionListener{
 		}*/
 	
 	    public Board() {
-	    	images = new TreeMap<Integer, Image>(); 
-	    	coors = new TreeMap<Integer, Coor>(); 
+	    	images = Collections.synchronizedSortedMap(new TreeMap<Integer, Image>()); 
+	    	coors = Collections.synchronizedSortedMap(new TreeMap<Integer, Coor>()); 
 	    	map2 = new Mapper(MaxMapX,MaxMapY,this);	//mapeo
 	    	map = map2.init();
 	    	setDoubleBuffered(true);	//se requiere un buffer de dibujo el cual se dibuja finalmente en pantalla (cuestiones menores de refresco de pantalla)
@@ -64,7 +65,7 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    	newImage(2,"ff.jpg", new Coor(420,310));		//anadimos un par de fondos
 	    	newImage(1,"bosque.png", new Coor(-300,-300));
 	    	newImage(3,"abajo_quieto.png", new Coor(0,0));	//las imagenes se superpondran de acuerdo al orden de carga (la ultima por encima de todas)
-	    	
+	    	n = new Npc(this, MOVEMENT_SPEED, "derecha_quieto_copia.png");
 	    	
 	        cell = map[o][p];	//inicializacion de celda actual (si el DebugSystem lanza errores posiblemente es porque se inicia antes que esto(muy improbable))
 	    }
@@ -77,8 +78,8 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    	Iterator<Coor> it2 = coors.values().iterator();
 	    	for(int i=0; i<images.size();i++){
 	    		Image a = it.next();
+	    		Coor d = it2.next();
 	    		if(!a.equals(images.get(3))){
-	    			Coor d = it2.next();
 	    			g2d.drawImage(a, cell.X()+d.X(), cell.Y()+d.Y(), null);
 	    		}else{
 	    			g2d.drawImage(a, 420, 310, null);
@@ -244,11 +245,11 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    	p++;
 	    	if(p < 0){	//limite superior
 	    		p = 0;
+	    		anima = true;
+	    		cell.undo_offsetD();
 	    	}else{
 	    	if(p > (MaxMapY/14)-1){	//limite inferior
 	    		p = (MaxMapY/14)-1;
-	    		anima = true;
-	    		cell.undo_offsetD();
 	    	}else{
 	    		Coor evalCell = map[o][p];
     			if(anima){
@@ -300,6 +301,7 @@ public class Board extends JPanel implements Runnable, ActionListener{
 				public_MaxMapX = MaxMapX;
 				public_MaxMapY = MaxMapY;
 				repaint();
+				n.update();
 				timeDiff = System.currentTimeMillis() - beforeTime;	//calculo del tiempo perdido ejecutando metodos
 	            sleep = RENDER_SPEED - timeDiff;	//calculo del tiempo a esperar
 	            if(sleep < 0){ 	//si el tiempo de ejecucion del Frame ha sido mayor al tiempo de espera, entonces no se duerme el thread (sleep = 1 milisegundo)
