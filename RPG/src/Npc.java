@@ -16,7 +16,7 @@ public class Npc implements ActionListener{
 	private String nextMov = "", move = "";
 	Coor cell;
 	private int anim = 0;
-	private static Set<Npc> npcs = null;
+	private static Set<Npc> npcs = null;	//set estatico donde se almacenan todos los npcs para su localizacion (a implementar: una id por npc para poder localizarlos en el set(cambiar el set por un mapa))
 	
 	public static Npc constructor(Board a, int MOVEMENT_SPEED, String i, Ia ia){
 		if(npcs != null){

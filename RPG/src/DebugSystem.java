@@ -30,6 +30,7 @@ public class DebugSystem extends JFrame implements ActionListener{
         ce.add(c);
         this.setContentPane(ce);
         Timer timer = new Timer(100, this);	//tiempo de actualizacion de las variables del debug 
+        try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
         timer.start();	//IMPORTANTE es aqui donde hay una baja probabilidad de error fatal si este metodo se ejecuta antes de la inicializacion del Board
         Set<Npc> u = Npc.list();
 		Iterator<Npc> it = u.iterator();

@@ -127,35 +127,35 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    	/*debido al nuevo metodo de limite de mapa, las comprobaciones (o<0) y (o > (MaxMapX/Mapper.cellPixels)-1) quedan fuera de uso, pero permaneceran por la dificultad de limpiar todo el codigo*/
 	    	
 	    	if(!anima)	//no se cambia la posicion si es el turno de la animacion
-	    	o++;
+	    	o++;	//se avanza en una casilla
 	    	//JOptionPane.showMessageDialog(null, (MaxMapX/13)-1);	//debug method
-	    	if(o < 0){	//limite izquierdo
-	    		o = 0;
+	    	if(o < 0){	//limite izquierdo /*Legacy*/
+	    		o = 0;	/*Legacy*/
 	    	}else{
-	    	if(o > (MaxMapX/Mapper.cellPixels)-1){	//limite derecho
-	    		o = (MaxMapX/Mapper.cellPixels)-1;
+	    	if(o > (MaxMapX/Mapper.cellPixels)-1){	//limite derecho /*Legacy*/
+	    		o = (MaxMapX/Mapper.cellPixels)-1;	/*Legacy*/
 	    		anima = true;	//se termina la animacion
 	    		cell.undo_offsetR();	//se resetea el offset
 	    	}else{
 	    		Coor evalCell = map[o][p];	//celda de evaluacion
 	    			if(anima){	//turno de la animacion
 	    				if(anim == 0){	//alternando entre paso izquierdo y paso derecho
-	    					newImage(3,"derecha_andando.png",new Coor(0,0));
-	    					cell.offsetR();	//offset a la celda actual para efect de paso
+	    					newImage(3,"derecha_andando.png",new Coor(0,0));//se actualiza la imagen
+	    					cell.offsetR();	//offset a la celda actual para efecto de paso
 	    					anima = false;	//turno de animacion finalizado
-	    					anim++;
+	    					anim++;	//alternando entre pasos
 	    				}else{
-	    					newImage(3,"derecha_andando2.png",new Coor(0,0));
-	    					cell.offsetR();	//offset a la celda actual para efect de paso
+	    					newImage(3,"derecha_andando2.png",new Coor(0,0));//se actualiza la imagen
+	    					cell.offsetR();	//offset a la celda actual para efecto de paso
 	    					anima = false;	//turno de animacion finalizado
-	    					anim--;
+	    					anim--; //alternando entre pasos
 	    				}
 		    	    }else if(evalCell.isAllow()){	//turno movimiento, solo si la celda a la que nos movemos esta disponible
 	    				cell.undo_offsetR();	//desacemos el offset de la celda atual
 	    				cell.setAllow(true);	//la desbloqueamos
 	    				this.cell = evalCell;	//avanzamos a la siguiente celda
 	    				cell.setAllow(false);	//la bloqueamos
-	    				newImage(3,"derecha_quieto.png",new Coor(0,0));
+	    				newImage(3,"derecha_quieto.png",new Coor(0,0));//se actualiza la imagen
 	    				anima = true;	//fin turno de movimiento
 	    			}else{	//si la celda no permite el movimiento a ella
 	    				anima = true;	//fin turno movimiento
@@ -289,24 +289,24 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    
 	    
 	    
-	    public void newImage(int id, String file, Coor position){
+	    public void newImage(int id, String file, Coor position){	//metodo para crear una nueva imagen
 	    	 ImageIcon a = new ImageIcon(file);
 		     Image b = a.getImage();
-		     images.put(id, b);
-		     coors.put(id, position);
+		     images.put(id, b);	//anadimos la nueva imagen al mapa de imagenes junto con su id
+		     coors.put(id, position); //anadimos la posicion de la imagen junto con su id al mapa de posiciones
 	    }
 	    
 
 		public void run() {		//loop principal, Frame
 			 long beforeTime = 0, timeDiff, sleep;
-		     beforeTime = System.currentTimeMillis();
+		     beforeTime = System.currentTimeMillis();	//tiempo actual
 			while(true){
 				publicCell = cell;	//actualizacion de variables publicas
 				public_o = o;
 				public_p = p;
 				public_MaxMapX = MaxMapX;
 				public_MaxMapY = MaxMapY;
-				repaint();
+				repaint();	//se actualiza la pantalla
 				timeDiff = System.currentTimeMillis() - beforeTime;	//calculo del tiempo perdido ejecutando metodos
 	            sleep = RENDER_SPEED - timeDiff;	//calculo del tiempo a esperar
 	            if(sleep < 0){ 	//si el tiempo de ejecucion del Frame ha sido mayor al tiempo de espera, entonces no se duerme el thread (sleep = 1 milisegundo)
