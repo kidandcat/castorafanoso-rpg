@@ -9,14 +9,15 @@
 public class Mapper {
 	static final int cellPixels = 14; //do not change!!
 	private Coor[][] map;
-	private int X,Y;
-	//private Board a;
+	private int X1,Y1;
+	private Board a;
 	
-	public Mapper(int x, int y, Board a){
-		this.X = x;
-		this.Y = y;
-		map = new Coor[(X/cellPixels)+1][(Y/cellPixels)+1];
-		//this.a = a;
+	public Mapper(int x1, int y1, Board a){
+		this.a = a;
+		this.X1 = x1;
+		this.Y1 = y1;
+		map = new Coor[(X1/cellPixels)+1][(Y1/cellPixels)+1];
+		
 	}
 	
 	/*public Coor isCoor(int x, int y){
@@ -37,11 +38,19 @@ public class Mapper {
 	}*/
 	
 	public Coor[][] init(){
-		for(int i = 0; i < X/cellPixels; i++){
-			for(int e = 0; e < Y/cellPixels; e++){
+		for(int i = 0; i < X1/cellPixels; i++){
+			for(int e = 0; e < Y1/cellPixels; e++){
 				map[i][e] = new Coor(-(i*cellPixels),-(e*cellPixels)); //se pixela en negativo porque el sistema origen de coordenadas que hemos escogido es justo el contrario al de java
 			}
 		}
+		for(int x = 0;x < a.public_MaxMapX/14 ; x++ )
+        	map[x][0].setAllow(false);
+        for(int y = 0;y < a.public_MaxMapX/14 ; y++ )
+        	map[0][y].setAllow(false);
+        for(int x = 0;x < a.public_MaxMapX/14 ; x++ )
+        	map[x][a.public_MaxMapX/14-1].setAllow(false);
+        for(int y = 0;y < a.public_MaxMapX/14 ; y++ )
+        	map[a.public_MaxMapX/14-1][y].setAllow(false);
 		//map[X/cellPixels][Y/cellPixels] = new Coor(-((X/cellPixels)*cellPixels),-((Y/cellPixels)*cellPixels));
 		return map;
 	}

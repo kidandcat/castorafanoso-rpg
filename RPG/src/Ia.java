@@ -20,13 +20,13 @@ public class Ia extends Thread{
 			try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
 			np.mov("D");
 			try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
-			np.mov("R");
+			np.mov("D");
 			try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
-			np.mov("R");
+			np.mov("D");
 			try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
-			np.mov("U");
+			np.mov("D");
 			try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
-			np.mov("L");
+			np.mov("D");
 			try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
 		}
 	}

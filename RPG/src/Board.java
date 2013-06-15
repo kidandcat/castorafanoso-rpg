@@ -54,6 +54,8 @@ public class Board extends JPanel implements Runnable, ActionListener{
 		}*/
 	
 	    public Board() {
+	    	public_MaxMapX = MaxMapX;
+	    	public_MaxMapY = MaxMapY;
 	    	images = Collections.synchronizedSortedMap(new TreeMap<Integer, Image>()); 
 	    	coors = Collections.synchronizedSortedMap(new TreeMap<Integer, Coor>()); 
 	    	map2 = new Mapper(MaxMapX,MaxMapY,this);	//mapeo
@@ -68,16 +70,8 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    	
 	        cell = map[o][p];	//inicializacion de celda actual (si el DebugSystem lanza errores posiblemente es porque se inicia antes que esto(muy improbable))
 	        
-	        
+	      
 	        /*Nuevo metodo de limitacion de mapas*/ //Se bloquean las celdas exteriores del mapa
-	        for(int x = 0;x < MaxMapX/14 ; x++ )
-	        	map[x][0].setAllow(false);
-	        for(int y = 0;y < MaxMapX/14 ; y++ )
-	        	map[0][y].setAllow(false);
-	        for(int x = 0;x < MaxMapX/14 ; x++ )
-	        	map[x][MaxMapX/14-1].setAllow(false);
-	        for(int y = 0;y < MaxMapX/14 ; y++ )
-	        	map[MaxMapX/14-1][y].setAllow(false);
 	    }
 	    
 	    
