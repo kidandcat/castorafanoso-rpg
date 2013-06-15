@@ -64,7 +64,7 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    	newImage(2,"ff.jpg", new Coor(420,310));		//anadimos un par de fondos
 	    	newImage(1,"bosque.png", new Coor(-300,-300));
 	    	newImage(3,"abajo_quieto.png", new Coor(0,0));	//las imagenes se superpondran de acuerdo al orden de carga (la ultima por encima de todas)
-	    	Npc.constructor(this, MOVEMENT_SPEED, "abajo_quieto_copia.png");
+	    	Npc.constructor(this, MOVEMENT_SPEED, "copia");
 	    	
 	        cell = map[o][p];	//inicializacion de celda actual (si el DebugSystem lanza errores posiblemente es porque se inicia antes que esto(muy improbable))
 	        
