@@ -39,7 +39,7 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	static final int RENDER_SPEED = 5;	//velocidad de renderizado(velocidad de refresco de la pantalla y todas las acciones que implica un frame)
 	private int anim = 0;	//variable para animacion
 	boolean anima = true,animac = true, movv = true;	//variable para animacion
-	private int o=0,p=0;	//coordenada actual;
+	private int o=1,p=1;	//coordenada actual;
 	private String move;
 	public int public_o = o, public_p = p;	//copia publica (igual que publicCell)
 	//private boolean end;	legacy variable
@@ -67,6 +67,17 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    	Npc.constructor(this, MOVEMENT_SPEED, "abajo_quieto_copia.png");
 	    	
 	        cell = map[o][p];	//inicializacion de celda actual (si el DebugSystem lanza errores posiblemente es porque se inicia antes que esto(muy improbable))
+	        
+	        
+	        /*Nuevo metodo de limitacion de mapas*/ //Se bloquean las celdas exteriores del mapa
+	        for(int x = 0;x < MaxMapX/14 ; x++ )
+	        	map[x][0].setAllow(false);
+	        for(int y = 0;y < MaxMapX/14 ; y++ )
+	        	map[0][y].setAllow(false);
+	        for(int x = 0;x < MaxMapX/14 ; x++ )
+	        	map[x][MaxMapX/14-1].setAllow(false);
+	        for(int y = 0;y < MaxMapX/14 ; y++ )
+	        	map[MaxMapX/14-1][y].setAllow(false);
 	    }
 	    
 	    
@@ -119,6 +130,8 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	   }
 	   
 	    private synchronized void moveR(){	//movimientos y control de limites de mapa (despues de una enorme rayada mental, todos los bordes limitados y celdas notAllow en funcionamiento)
+	    	/*debido al nuevo metodo de limite de mapa, las comprobaciones (o<0) y (o > (MaxMapX/Mapper.cellPixels)-1) quedan fuera de uso, pero permaneceran por la dificultad de limpiar todo el codigo*/
+	    	
 	    	if(!anima)	//no se cambia la posicion si es el turno de la animacion
 	    	o++;
 	    	//JOptionPane.showMessageDialog(null, (MaxMapX/13)-1);	//debug method

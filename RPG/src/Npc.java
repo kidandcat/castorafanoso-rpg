@@ -12,7 +12,7 @@ import javax.swing.Timer;
 public class Npc implements ActionListener{
 	private Board a;
 	private String i;
-	int o = 0,p = 0;
+	int o = 1,p = 2;
 	private boolean anima = true, animac = true;
 	private String nextMov = "", move = "";
 	Coor cell;
@@ -41,7 +41,6 @@ public class Npc implements ActionListener{
 	private Npc(Board a, String i){
 		this.a = a;
 		this.i = i;
-		p++;
         a.newImage(4, i, new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310));
         Timer timer = new Timer(a.MOVEMENT_SPEED/2, this);	//crea un timer que ejecutara el ActionListener de esta clase cada vez que pase el tiempo indicado
         timer.start();
@@ -82,6 +81,7 @@ public class Npc implements ActionListener{
 				anima = true;
 			}else{
 				anima = true;
+				a.newImage(4, "abajo_quieto_copia.png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310 -Mapper.cellPixels));
 				p--;
 		}
 	}
@@ -117,6 +117,7 @@ public class Npc implements ActionListener{
 				anima = true;
 			}else{
 				anima = true;
+				a.newImage(4, "arriba_quieto_copia.png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310 +Mapper.cellPixels));
 				p++;
 		}
 	}
@@ -153,6 +154,7 @@ public class Npc implements ActionListener{
 				anima = true;
 			}else{
 				anima = true;
+				a.newImage(4, "izquierda_quieto_copia.png", new Coor(o*Mapper.cellPixels+Mapper.cellPixels + 420,p*Mapper.cellPixels + 310));
 				o++;
 		}
 	}
@@ -189,6 +191,7 @@ public class Npc implements ActionListener{
 				anima = true;
 			}else{
 				anima = true;
+				a.newImage(4, "derecha_quieto_copia.png", new Coor(o*Mapper.cellPixels-Mapper.cellPixels + 420,p*Mapper.cellPixels + 310));
 				o--;
 		}
 	}
