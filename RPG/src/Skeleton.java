@@ -23,19 +23,22 @@ public class Skeleton extends JFrame implements KeyListener {
         addKeyListener(this);
         setFocusable(true);
     }
+    
+    /*
+     * MAIN METHOD
+     */
     public static void main(String[] args) {
-    	/*Mapper m = new Mapper(800,800);			//debug method: comprueba que Mapper funciona correctamente
-    	for(int i = 0; i < 800/13; i++){
-			for(int e = 0; e < 800/13; e++){
-				System.out.println(e + " " + i + " " + m.init()[i][e].toString());
-			}
-		}*/
-    	
     	Board a = new Board();	//inicializacion graficos
     	db = new DebugSystem(a);		//inicializacion debugger
     	new Skeleton(a);		//inicializacion ventana
        
     }
+    /*
+     * 
+     */
+    
+    
+    
 	@Override
 	public void keyPressed(KeyEvent arg0) {		//detectamos la entrada del teclado
 		if(arg0.getKeyCode() == KeyEvent.VK_A){		//movimiento hacia izquierda (A)
