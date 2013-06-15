@@ -15,17 +15,18 @@ public class Npc implements ActionListener{
 	private boolean anima = true, animac = true;
 	private String nextMov = "", move = "";
 	Coor cell;
+	private int ID = 4;
 	private int anim = 0;
 	private static Set<Npc> npcs = null;	//set estatico donde se almacenan todos los npcs para su localizacion (a implementar: una id por npc para poder localizarlos en el set(cambiar el set por un mapa))
 	
-	public static Npc constructor(Board a, int MOVEMENT_SPEED, String i, Ia ia){
+	public static Npc constructor(Board a, int ID, int MOVEMENT_SPEED, String i, Ia ia){
 		if(npcs != null){
-			Npc n = new Npc(a, i, ia);
+			Npc n = new Npc(a, ID, i, ia);
 			npcs.add(n);
 			return n;
 		}else{
 			npcs = new HashSet<Npc>();
-			Npc n = new Npc(a,i, ia);
+			Npc n = new Npc(a, ID,i, ia);
 			npcs.add(n);
 			return n;
 		}
@@ -34,12 +35,16 @@ public class Npc implements ActionListener{
 		return npcs;
 	}
 	
+	public void destroy(){
+		npcs.remove(this);
+		a.destroyImage(ID);
+	}
 	
-	
-	private Npc(Board a, String i, Ia ia){
+	private Npc(Board a, int ID, String i, Ia ia){
+		this.ID = ID;
 		this.a = a;
 		this.i = i;
-        a.newImage(4, "abajo_quieto_" + i + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310));
+        a.newImage(ID, "abajo_quieto_" + i + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310));
         Timer timer = new Timer(a.MOVEMENT_SPEED/2, this);	//crea un timer que ejecutara el ActionListener de esta clase cada vez que pase el tiempo indicado
         timer.start();
         cell = a.map[o][p];
@@ -65,11 +70,11 @@ public class Npc implements ActionListener{
     		Coor evalCell = a.map[o][p];
 			if(anima){
 				if(anim == 0){
-					a.newImage(4, "abajo_andando_" + i + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310 +7));
+					a.newImage(ID, "abajo_andando_" + i + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310 +7));
 					anima = false;
 					anim++;
 				}else{
-					a.newImage(4, "abajo_andando2_" + i + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310 +7));
+					a.newImage(ID, "abajo_andando2_" + i + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310 +7));
 					anima = false;
 					anim--;
 				}
@@ -77,11 +82,11 @@ public class Npc implements ActionListener{
 				cell.setAllow(true);
 				this.cell = evalCell;
 				cell.setAllow(false);
-				a.newImage(4, "abajo_quieto_" + i + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310));
+				a.newImage(ID, "abajo_quieto_" + i + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310));
 				anima = true;
 			}else{
 				anima = true;
-				a.newImage(4, "abajo_quieto_" + i + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310 -Mapper.cellPixels));
+				a.newImage(ID, "abajo_quieto_" + i + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310 -Mapper.cellPixels));
 				p--;
 		}
 	}
@@ -101,11 +106,11 @@ public class Npc implements ActionListener{
     		Coor evalCell = a.map[o][p];
 			if(anima){
 				if(anim == 0){
-					a.newImage(4, "arriba_andando_" + i + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310 -7));
+					a.newImage(ID, "arriba_andando_" + i + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310 -7));
 					anima = false;
 					anim++;
 				}else{
-					a.newImage(4, "arriba_andando2_" + i + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310 -7));
+					a.newImage(ID, "arriba_andando2_" + i + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310 -7));
 					anima = false;
 					anim--;
 				}
@@ -113,11 +118,11 @@ public class Npc implements ActionListener{
 				cell.setAllow(true);
 				this.cell = evalCell;
 				cell.setAllow(false);
-				a.newImage(4, "arriba_quieto_" + i + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310));
+				a.newImage(ID, "arriba_quieto_" + i + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310));
 				anima = true;
 			}else{
 				anima = true;
-				a.newImage(4, "arriba_quieto_" + i + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310 +Mapper.cellPixels));
+				a.newImage(ID, "arriba_quieto_" + i + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310 +Mapper.cellPixels));
 				p++;
 		}
 	}
@@ -138,11 +143,11 @@ public class Npc implements ActionListener{
     		Coor evalCell = a.map[o][p];
 			if(anima){
 				if(anim == 0){
-					a.newImage(4, "izquierda_andando_" + i + ".png", new Coor(o*Mapper.cellPixels-7 + 420,p*Mapper.cellPixels + 310));
+					a.newImage(ID, "izquierda_andando_" + i + ".png", new Coor(o*Mapper.cellPixels-7 + 420,p*Mapper.cellPixels + 310));
 					anima = false;
 					anim++;
 				}else{
-					a.newImage(4, "izquierda_andando2_" + i + ".png", new Coor(o*Mapper.cellPixels-7 + 420,p*Mapper.cellPixels + 310));
+					a.newImage(ID, "izquierda_andando2_" + i + ".png", new Coor(o*Mapper.cellPixels-7 + 420,p*Mapper.cellPixels + 310));
 					anima = false;
 					anim--;
 				}
@@ -150,11 +155,11 @@ public class Npc implements ActionListener{
 				cell.setAllow(true);
 				this.cell = evalCell;
 				cell.setAllow(false);
-				a.newImage(4, "izquierda_quieto_" + i + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310));
+				a.newImage(ID, "izquierda_quieto_" + i + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310));
 				anima = true;
 			}else{
 				anima = true;
-				a.newImage(4, "izquierda_quieto_" + i + ".png", new Coor(o*Mapper.cellPixels+Mapper.cellPixels + 420,p*Mapper.cellPixels + 310));
+				a.newImage(ID, "izquierda_quieto_" + i + ".png", new Coor(o*Mapper.cellPixels+Mapper.cellPixels + 420,p*Mapper.cellPixels + 310));
 				o++;
 		}
 	}
@@ -175,11 +180,11 @@ public class Npc implements ActionListener{
     		Coor evalCell = a.map[o][p];
 			if(anima){
 				if(anim == 0){
-					a.newImage(4, "derecha_andando_" + i + ".png", new Coor(o*Mapper.cellPixels+7 + 420,p*Mapper.cellPixels + 310));
+					a.newImage(ID, "derecha_andando_" + i + ".png", new Coor(o*Mapper.cellPixels+7 + 420,p*Mapper.cellPixels + 310));
 					anima = false;
 					anim++;
 				}else{
-					a.newImage(4, "derecha_andando2_" + i + ".png", new Coor(o*Mapper.cellPixels+7 + 420,p*Mapper.cellPixels + 310));
+					a.newImage(ID, "derecha_andando2_" + i + ".png", new Coor(o*Mapper.cellPixels+7 + 420,p*Mapper.cellPixels + 310));
 					anima = false;
 					anim--;
 				}
@@ -187,11 +192,11 @@ public class Npc implements ActionListener{
 				cell.setAllow(true);
 				this.cell = evalCell;
 				cell.setAllow(false);
-				a.newImage(4, "derecha_quieto_" + i + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310));
+				a.newImage(ID, "derecha_quieto_" + i + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310));
 				anima = true;
 			}else{
 				anima = true;
-				a.newImage(4, "derecha_quieto_" + i + ".png", new Coor(o*Mapper.cellPixels-Mapper.cellPixels + 420,p*Mapper.cellPixels + 310));
+				a.newImage(ID, "derecha_quieto_" + i + ".png", new Coor(o*Mapper.cellPixels-Mapper.cellPixels + 420,p*Mapper.cellPixels + 310));
 				o--;
 		}
 	}

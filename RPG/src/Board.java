@@ -30,7 +30,6 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	private Coor cell;	//celda actual
 	public Coor publicCell = cell;	//copia de cell publica para que el sistema de debug y otras clases puedan acceder en tiempo real a la variable sin necesidad de un metodo
 	Coor[][] map;	//mapa actual
-	Mapper map2;
 	private int MaxMapX = 800;	//maximo tamaño horizontal del mapa actual PIXELES
 	private int MaxMapY = 800;	//maximo tamaño vertical del mapa actual PIXELES
 	int public_MaxMapX;
@@ -58,15 +57,14 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    	public_MaxMapY = MaxMapY;
 	    	images = Collections.synchronizedSortedMap(new TreeMap<Integer, Image>()); 
 	    	coors = Collections.synchronizedSortedMap(new TreeMap<Integer, Coor>()); 
-	    	map2 = new Mapper(MaxMapX,MaxMapY,this);	//mapeo
-	    	map = map2.init();
+	    	map = new Mapper(MaxMapX,MaxMapY,this).init();	//mapeo
 	    	setDoubleBuffered(true);	//se requiere un buffer de dibujo el cual se dibuja finalmente en pantalla (cuestiones menores de refresco de pantalla)
 	    	
 	    	/*Cargamos imagenes*/ //IMPORTANTE las ids de las imagenes van de 2 para abajo (pueden ser negativas)
 	    	newImage(2,"ff.jpg", new Coor(420,310));		//anadimos un par de fondos
 	    	newImage(1,"bosque.png", new Coor(-300,-300));
 	    	newImage(3,"abajo_quieto.png", new Coor(0,0));	//las imagenes se superpondran de acuerdo al orden de carga (la ultima por encima de todas)
-	    	Npc.constructor(this, MOVEMENT_SPEED, "copia", new Ia());
+	    	Npc.constructor(this, 4, MOVEMENT_SPEED, "copia", new Ia());
 	    	
 	        cell = map[o][p];	//inicializacion de celda actual (si el DebugSystem lanza errores posiblemente es porque se inicia antes que esto(muy improbable))
 	        
@@ -74,6 +72,14 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	        /*Nuevo metodo de limitacion de mapas*/ //Se bloquean las celdas exteriores del mapa
 	    }
 	    
+	    public void new_map(int dimensionX, int dimensionY, Map<Integer, Image> images, Map<Integer, Coor> coors, Coor[][] map){
+	    	MaxMapX = dimensionX;
+	    	MaxMapY = dimensionY;
+	    	this.images = images;
+	    	this.coors = coors;
+	    	this.map = map;
+	    	cell = map[1][1];
+	    }
 	    
 	    
 	    public void paint(Graphics g) {		//pintado de pantalla, este metodo no se ejecuta por nosotros mismos, el sistema de graficos lo ejecuta cada vez que llamamos a repaint()
@@ -296,6 +302,10 @@ public class Board extends JPanel implements Runnable, ActionListener{
 		     coors.put(id, position); //anadimos la posicion de la imagen junto con su id al mapa de posiciones
 	    }
 	    
+	    public void destroyImage(int id){
+	    	images.remove(id);
+	    	coors.remove(id);
+	    }
 
 		public void run() {		//loop principal, Frame
 			 long beforeTime = 0, timeDiff, sleep;
