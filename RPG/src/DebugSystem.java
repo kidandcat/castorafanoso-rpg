@@ -1,6 +1,9 @@
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Iterator;
+import java.util.Set;
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -12,6 +15,7 @@ import javax.swing.Timer;
 public class DebugSystem extends JFrame implements ActionListener{
 	Board a;					//instancia Board para acceder a diversas variables
 	JLabel b,c,d;
+	Npc np;
 	public DebugSystem(Board a){
 		this.a = a;
 		JPanel ce = new JPanel(new FlowLayout());
@@ -27,6 +31,10 @@ public class DebugSystem extends JFrame implements ActionListener{
         this.setContentPane(ce);
         Timer timer = new Timer(100, this);	//tiempo de actualizacion de las variables del debug 
         timer.start();	//IMPORTANTE es aqui donde hay una baja probabilidad de error fatal si este metodo se ejecuta antes de la inicializacion del Board
+        Set<Npc> u = Npc.list();
+		Iterator<Npc> it = u.iterator();
+		if(it.hasNext())
+		np = it.next();
 	}
 	
 	public void print_map(){
@@ -49,8 +57,9 @@ public class DebugSystem extends JFrame implements ActionListener{
 	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		b.setText("Pixels: " + a.publicCell.toString());		//muestra en el Debug System los pixeles en los que se encuentra el centro de camara
-		c.setText("Cell: [" + a.public_o + "] [" + a.public_p + "]");	//igual que el anterior pero con el numero de celda			//debug method: comprueba que Mapper funciona correctamente
+		
+		b.setText("Pixels: " + np.cell.toString());		//muestra en el Debug System los pixeles en los que se encuentra el centro de camara
+		c.setText("Cell: [" + np.o + "] [" + np.p + "]");	//igual que el anterior pero con el numero de celda			//debug method: comprueba que Mapper funciona correctamente
 	}
 }
 

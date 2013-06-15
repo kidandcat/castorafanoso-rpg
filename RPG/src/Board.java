@@ -35,10 +35,10 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	private int MaxMapY = 800;	//maximo tamaño vertical del mapa actual PIXELES
 	int public_MaxMapX;
 	int public_MaxMapY;
-	private static final int MOVEMENT_SPEED = 300;	//velocidad del movimiento (solo pasos, el movimiento de renderizado es otra cosa)
-	private static final int RENDER_SPEED = 5;	//velocidad de renderizado(velocidad de refresco de la pantalla y todas las acciones que implica un frame)
+	final int MOVEMENT_SPEED = 300;	//velocidad del movimiento (solo pasos, el movimiento de renderizado es otra cosa)
+	static final int RENDER_SPEED = 5;	//velocidad de renderizado(velocidad de refresco de la pantalla y todas las acciones que implica un frame)
 	private int anim = 0;	//variable para animacion
-	boolean anima = true,animac = true;	//variable para animacion
+	boolean anima = true,animac = true, movv = true;	//variable para animacion
 	private int o=0,p=0;	//coordenada actual;
 	private String move;
 	public int public_o = o, public_p = p;	//copia publica (igual que publicCell)
@@ -47,7 +47,6 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	private String nextMov = "";	//siguiente movimiento del personaje main
 	private Map<Integer, Image> images;
 	private Map<Integer, Coor> coors;
-	private Npc n;
 	
 	/*METODOS*/
 	/*public synchronized boolean isEnd(){	legacy method
@@ -65,7 +64,7 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    	newImage(2,"ff.jpg", new Coor(420,310));		//anadimos un par de fondos
 	    	newImage(1,"bosque.png", new Coor(-300,-300));
 	    	newImage(3,"abajo_quieto.png", new Coor(0,0));	//las imagenes se superpondran de acuerdo al orden de carga (la ultima por encima de todas)
-	    	n = new Npc(this, MOVEMENT_SPEED, "derecha_quieto_copia.png");
+	    	Npc.constructor(this, MOVEMENT_SPEED, "abajo_quieto_copia.png");
 	    	
 	        cell = map[o][p];	//inicializacion de celda actual (si el DebugSystem lanza errores posiblemente es porque se inicia antes que esto(muy improbable))
 	    }
@@ -126,8 +125,8 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    	if(o < 0){	//limite izquierdo
 	    		o = 0;
 	    	}else{
-	    	if(o > (MaxMapX/14)-1){	//limite derecho
-	    		o = (MaxMapX/14)-1;
+	    	if(o > (MaxMapX/Mapper.cellPixels)-1){	//limite derecho
+	    		o = (MaxMapX/Mapper.cellPixels)-1;
 	    		anima = true;	//se termina la animacion
 	    		cell.undo_offsetR();	//se resetea el offset
 	    	}else{
@@ -168,8 +167,8 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    		anima = true;
 	    		cell.undo_offsetL();
 	    	}else{
-	    		if(o > (MaxMapX/14)-1){	//limite derecho
-	    			o = (MaxMapX/14)-1;
+	    		if(o > (MaxMapX/Mapper.cellPixels)-1){	//limite derecho
+	    			o = (MaxMapX/Mapper.cellPixels)-1;
 	    		}else{
 	    			Coor evalCell = map[o][p];
 	    			if(anima){
@@ -208,8 +207,8 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    		anima = true;
 	    		cell.undo_offsetU();
 	    	}else{
-	    	if(p > (MaxMapY/14)-1){	//limite inferior
-	    		p = (MaxMapY/14)-1;
+	    	if(p > (MaxMapY/Mapper.cellPixels)-1){	//limite inferior
+	    		p = (MaxMapY/Mapper.cellPixels)-1;
 	    	}else{
 	    		Coor evalCell = map[o][p];
     			if(anima){
@@ -248,8 +247,8 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    		anima = true;
 	    		cell.undo_offsetD();
 	    	}else{
-	    	if(p > (MaxMapY/14)-1){	//limite inferior
-	    		p = (MaxMapY/14)-1;
+	    	if(p > (MaxMapY/Mapper.cellPixels)-1){	//limite inferior
+	    		p = (MaxMapY/Mapper.cellPixels)-1;
 	    	}else{
 	    		Coor evalCell = map[o][p];
     			if(anima){
@@ -301,7 +300,6 @@ public class Board extends JPanel implements Runnable, ActionListener{
 				public_MaxMapX = MaxMapX;
 				public_MaxMapY = MaxMapY;
 				repaint();
-				n.update();
 				timeDiff = System.currentTimeMillis() - beforeTime;	//calculo del tiempo perdido ejecutando metodos
 	            sleep = RENDER_SPEED - timeDiff;	//calculo del tiempo a esperar
 	            if(sleep < 0){ 	//si el tiempo de ejecucion del Frame ha sido mayor al tiempo de espera, entonces no se duerme el thread (sleep = 1 milisegundo)

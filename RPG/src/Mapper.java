@@ -7,7 +7,7 @@
 */
 
 public class Mapper {
-	private static final int cellPixels = 14; //do not change!!
+	static final int cellPixels = 14; //do not change!!
 	private Coor[][] map;
 	private int X,Y;
 	//private Board a;
