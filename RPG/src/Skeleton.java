@@ -1,9 +1,6 @@
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.Iterator;
-import java.util.Set;
-
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -55,38 +52,6 @@ public class Skeleton extends JFrame implements KeyListener {
 		}
 		if(arg0.getKeyCode() == KeyEvent.VK_M){
 			db.print_map();
-		}
-		if(arg0.getKeyCode() == KeyEvent.VK_J){
-			Set<Npc> u = Npc.list();
-			Iterator<Npc> it = u.iterator();
-			Npc np = null;
-			if(it.hasNext())
-			np = it.next();
-			np.mov("D");
-		}
-		if(arg0.getKeyCode() == KeyEvent.VK_K){
-			Set<Npc> u = Npc.list();
-			Iterator<Npc> it = u.iterator();
-			Npc np = null;
-			if(it.hasNext())
-			np = it.next();
-			np.mov("R");
-		}
-		if(arg0.getKeyCode() == KeyEvent.VK_H){
-			Set<Npc> u = Npc.list();
-			Iterator<Npc> it = u.iterator();
-			Npc np = null;
-			if(it.hasNext())
-			np = it.next();
-			np.mov("L");
-		}
-		if(arg0.getKeyCode() == KeyEvent.VK_U){
-			Set<Npc> u = Npc.list();
-			Iterator<Npc> it = u.iterator();
-			Npc np = null;
-			if(it.hasNext())
-			np = it.next();
-			np.mov("U");
 		}
 		if(arg0.getKeyCode() == KeyEvent.VK_N){
 			JOptionPane.showMessageDialog(null, "ATENCION! la herramienta de debug no esta limitada, lo que implica que si te sales de los limites saltaran errores criticos");

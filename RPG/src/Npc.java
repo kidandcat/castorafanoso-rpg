@@ -18,15 +18,14 @@ public class Npc implements ActionListener{
 	private int anim = 0;
 	private static Set<Npc> npcs = null;
 	
-	
-	public static Npc constructor(Board a, int MOVEMENT_SPEED, String i){
+	public static Npc constructor(Board a, int MOVEMENT_SPEED, String i, Ia ia){
 		if(npcs != null){
-			Npc n = new Npc(a, i);
+			Npc n = new Npc(a, i, ia);
 			npcs.add(n);
 			return n;
 		}else{
 			npcs = new HashSet<Npc>();
-			Npc n = new Npc(a,i);
+			Npc n = new Npc(a,i, ia);
 			npcs.add(n);
 			return n;
 		}
@@ -37,13 +36,15 @@ public class Npc implements ActionListener{
 	
 	
 	
-	private Npc(Board a, String i){
+	private Npc(Board a, String i, Ia ia){
 		this.a = a;
 		this.i = i;
         a.newImage(4, "abajo_quieto_" + i + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310));
         Timer timer = new Timer(a.MOVEMENT_SPEED/2, this);	//crea un timer que ejecutara el ActionListener de esta clase cada vez que pase el tiempo indicado
         timer.start();
         cell = a.map[o][p];
+        ia.init(this);
+        ia.start();
 	}
 
 	
