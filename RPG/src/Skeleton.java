@@ -56,6 +56,9 @@ public class Skeleton extends JFrame implements KeyListener {
 		if(arg0.getKeyCode() == KeyEvent.VK_M){
 			db.print_map();
 		}
+		if(arg0.getKeyCode() == KeyEvent.VK_B){
+			db.remove_npc(Integer.parseInt(JOptionPane.showInputDialog("ID:")));
+		}
 		if(arg0.getKeyCode() == KeyEvent.VK_N){
 			JOptionPane.showMessageDialog(null, "ATENCION! la herramienta de debug no esta limitada, lo que implica que si te sales de los limites saltaran errores criticos");
 			int x = Integer.parseInt(JOptionPane.showInputDialog("X:"));

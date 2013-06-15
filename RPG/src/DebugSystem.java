@@ -49,6 +49,14 @@ public class DebugSystem extends JFrame implements ActionListener{
 		}	
 	}
 	
+	public void remove_npc(int ID){
+		for(Npc np : Npc.list())
+			if(np.ID() == ID){
+				np.destroy();
+				JOptionPane.showMessageDialog(null, "Npc ID: " + ID + " removed");
+			}
+	}
+	
 	public void change_cell_state(int x, int y){
 		int i = JOptionPane.showConfirmDialog(null, "El estado de la celda [" + x + "][" + y + "] es: " + a.map[x][y].isAllow() + "\n Quiere cambiarlo?");
 		if(i == 0){

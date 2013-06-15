@@ -1,7 +1,7 @@
 
 public class Ia extends Thread{
 	private Npc np = null;
-	
+	private boolean stop = false;
 	
 	public Ia(){
 		
@@ -11,23 +11,16 @@ public class Ia extends Thread{
 		this.np = np;
 	}
 	
+	public void destroy(){
+		stop = true;
+	}
 	
 	public void run(){
-		while(true){
+		
+		while(!stop){
 			np.mov("D");
-			try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
-			np.mov("D");
-			try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
-			np.mov("D");
-			try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
-			np.mov("D");
-			try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
-			np.mov("D");
-			try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
-			np.mov("D");
-			try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
-			np.mov("D");
-			try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
+			try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
 		}
+		
 	}
 }
