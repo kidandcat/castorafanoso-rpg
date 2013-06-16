@@ -77,7 +77,7 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	        ImageIcon a = new ImageIcon("bosque.png");
 		    Image b = a.getImage();
 		    ImageIcon a1 = new ImageIcon("1.png");
-		    Image b1 = a.getImage();
+		    Image b1 = a1.getImage();
 		    images2.put(1, b);
 		    images2.put(2, b1);
 		    coors2.put(1, new Coor(0,0));
