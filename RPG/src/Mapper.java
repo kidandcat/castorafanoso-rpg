@@ -43,14 +43,14 @@ public class Mapper {
 				map[i][e] = new Coor(-(i*cellPixels),-(e*cellPixels)); //se pixela en negativo porque el sistema origen de coordenadas que hemos escogido es justo el contrario al de java
 			}
 		}
-		for(int x = 0;x < a.public_MaxMapX/14 ; x++ )
+		for(int x = 0;x < X1/cellPixels ; x++ )
         	map[x][0].setAllow(false);
-        for(int y = 0;y < a.public_MaxMapX/14 ; y++ )
+        for(int y = 0;y < Y1/cellPixels ; y++ )
         	map[0][y].setAllow(false);
-        for(int x = 0;x < a.public_MaxMapX/14 ; x++ )
-        	map[x][a.public_MaxMapX/14-1].setAllow(false);
-        for(int y = 0;y < a.public_MaxMapX/14 ; y++ )
-        	map[a.public_MaxMapX/14-1][y].setAllow(false);
+        for(int x = 0;x < X1/cellPixels ; x++ )
+        	map[x][X1/cellPixels-1].setAllow(false);
+        for(int y = 0;y < Y1/cellPixels ; y++ )
+        	map[Y1/cellPixels-1][y].setAllow(false);
 		//map[X/cellPixels][Y/cellPixels] = new Coor(-((X/cellPixels)*cellPixels),-((Y/cellPixels)*cellPixels));
 		return map;
 	}

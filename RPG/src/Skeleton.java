@@ -6,8 +6,8 @@ import javax.swing.JOptionPane;
 
 @SuppressWarnings("serial")
 public class Skeleton extends JFrame implements KeyListener {
-	private static final int SCREEN_X = 420;	//tamaño horizontal de la ventana principal
-	private static final int SCREEN_Y = 310;	//tamaño vertical de la ventana principal
+	private static final int SCREEN_X = 840;	//tamaño horizontal de la ventana principal
+	private static final int SCREEN_Y = 620;	//tamaño vertical de la ventana principal
 	Board a;
 	static DebugSystem db;
     public Skeleton(Board a) {
