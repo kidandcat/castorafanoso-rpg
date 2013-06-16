@@ -10,10 +10,8 @@ public class Mapper {
 	static final int cellPixels = 14; //do not change!!
 	private Coor[][] map;
 	private int X1,Y1;
-	private Board a;
 	
 	public Mapper(int x1, int y1, Board a){
-		this.a = a;
 		this.X1 = x1;
 		this.Y1 = y1;
 		map = new Coor[(X1/cellPixels)+1][(Y1/cellPixels)+1];
