@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -68,8 +69,22 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    	
 	        cell = map[o][p];	//inicializacion de celda actual (si el DebugSystem lanza errores posiblemente es porque se inicia antes que esto(muy improbable))
 	        
-	      
+	        
+	        
+	        Map<Integer, Image> images2 = Collections.synchronizedSortedMap(new TreeMap<Integer, Image>()); 
+	        Map<Integer, Coor> coors2 = Collections.synchronizedSortedMap(new TreeMap<Integer, Coor>()); 
+	        ImageIcon a = new ImageIcon("bosque.png");
+		    Image b = a.getImage();
+		    images2.put(2, b);
+		    coors2.put(2, new Coor(0,0));
+		    Coor[][] map2 = new Mapper(200,200,this).init();
+	        Mapp.constructor(1, 200, 200, images2, coors2, map2);
 	        /*Nuevo metodo de limitacion de mapas*/ //Se bloquean las celdas exteriores del mapa
+	    }
+	    
+	    
+	    public void changeMap(){
+	    	Mapp.changeMap(Integer.parseInt(JOptionPane.showInputDialog("ID del mapa: ")));
 	    }
 	    
 	    public void new_map(int dimensionX, int dimensionY, Map<Integer, Image> images, Map<Integer, Coor> coors, Coor[][] map){

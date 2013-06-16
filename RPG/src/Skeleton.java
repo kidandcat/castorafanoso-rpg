@@ -6,8 +6,8 @@ import javax.swing.JOptionPane;
 
 @SuppressWarnings("serial")
 public class Skeleton extends JFrame implements KeyListener {
-	private static final int SCREEN_X = 840;	//tamaño horizontal de la ventana principal
-	private static final int SCREEN_Y = 620;	//tamaño vertical de la ventana principal
+	private static final int SCREEN_X = 420;	//tamaño horizontal de la ventana principal
+	private static final int SCREEN_Y = 310;	//tamaño vertical de la ventana principal
 	Board a;
 	static DebugSystem db;
     public Skeleton(Board a) {
@@ -31,7 +31,7 @@ public class Skeleton extends JFrame implements KeyListener {
     	Board a = new Board();	//inicializacion graficos
     	db = new DebugSystem(a);		//inicializacion debugger
     	new Skeleton(a);		//inicializacion ventana
-       
+    	JOptionPane.showMessageDialog(null, "Controles de movimiento: WASD\nEliminar npc: B\nVer pixeles de coordenada: M\nCambiar estado de celda: N\nCambiar mapa: V");
     }
     /*
      * 
@@ -55,6 +55,9 @@ public class Skeleton extends JFrame implements KeyListener {
 		}
 		if(arg0.getKeyCode() == KeyEvent.VK_M){
 			db.print_map();
+		}
+		if(arg0.getKeyCode() == KeyEvent.VK_V){
+			a.changeMap();
 		}
 		if(arg0.getKeyCode() == KeyEvent.VK_B){
 			db.remove_npc(Integer.parseInt(JOptionPane.showInputDialog("ID:")));

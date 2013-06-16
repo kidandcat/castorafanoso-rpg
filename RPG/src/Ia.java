@@ -19,7 +19,9 @@ public class Ia extends Thread{
 		
 		while(!stop){
 			np.mov("D");
-			try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
+			try {Thread.sleep(5000);} catch (InterruptedException e) {e.printStackTrace();}
+			np.mov("R");
+			try {Thread.sleep(5000);} catch (InterruptedException e) {e.printStackTrace();}
 		}
 		
 	}
