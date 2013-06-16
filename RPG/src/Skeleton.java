@@ -56,6 +56,17 @@ public class Skeleton extends JFrame implements KeyListener {
 		if(arg0.getKeyCode() == KeyEvent.VK_M){
 			db.print_map();
 		}
+		
+		if(arg0.getKeyCode() == KeyEvent.VK_I){
+			a.ia.nextMov1 = "U";
+		}if(arg0.getKeyCode() == KeyEvent.VK_K){
+			a.ia.nextMov1 = "D";
+		}if(arg0.getKeyCode() == KeyEvent.VK_J){
+			a.ia.nextMov1 = "L";
+		}if(arg0.getKeyCode() == KeyEvent.VK_L){
+			a.ia.nextMov1 = "R";
+		}
+		
 		if(arg0.getKeyCode() == KeyEvent.VK_V){
 			a.changeMap();
 		}

@@ -2,6 +2,7 @@
 public class Ia extends Thread{
 	private Npc np = null;
 	private boolean stop = false;
+	String nextMov1;
 	
 	public Ia(){
 		
@@ -16,13 +17,23 @@ public class Ia extends Thread{
 	}
 	
 	public void run(){
-		
 		while(!stop){
-			np.mov("D");
-			try {Thread.sleep(5000);} catch (InterruptedException e) {e.printStackTrace();}
-			np.mov("R");
-			try {Thread.sleep(5000);} catch (InterruptedException e) {e.printStackTrace();}
+			if(nextMov1 == "D"){
+				np.mov("D");
+				nextMov1 = "";
+			}
+			if(nextMov1 == "U"){
+				np.mov("U");
+				nextMov1 = "";
+			}
+			if(nextMov1 == "L"){
+				np.mov("L");
+				nextMov1 = "";
+			}
+			if(nextMov1 == "R"){
+				np.mov("R");
+				nextMov1 = "";
+			}
 		}
-		
 	}
 }

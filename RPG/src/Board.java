@@ -39,7 +39,7 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	static final int RENDER_SPEED = 5;	//velocidad de renderizado(velocidad de refresco de la pantalla y todas las acciones que implica un frame)
 	private int anim = 0;	//variable para animacion
 	boolean anima = true,animac = true, movv = true;	//variable para animacion
-	private int o=1,p=1;	//coordenada actual;
+	private int o=27,p=42;	//coordenada actual;
 	private String move;
 	public int public_o = o, public_p = p;	//copia publica (igual que publicCell)
 	//private boolean end;	legacy variable
@@ -47,7 +47,7 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	private String nextMov = "";	//siguiente movimiento del personaje main
 	private Map<Integer, Image> images;
 	private Map<Integer, Coor> coors;
-	
+	Ia ia;
 	/*METODOS*/
 	/*public synchronized boolean isEnd(){	legacy method
 			return end;
@@ -62,10 +62,11 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    	setDoubleBuffered(true);	//se requiere un buffer de dibujo el cual se dibuja finalmente en pantalla (cuestiones menores de refresco de pantalla)
 	    	
 	    	/*Cargamos imagenes*/ //IMPORTANTE las ids de las imagenes van de 2 para abajo (pueden ser negativas)
-	    	newImage(2,"ff.jpg", new Coor(420,310));		//anadimos un par de fondos
+	    	newImage(2,"2.gif", new Coor(420,310));		//anadimos un par de fondos
 	    	newImage(1,"bosque.png", new Coor(-300,-300));
 	    	newImage(3,"abajo_quieto.png", new Coor(0,0));	//las imagenes se superpondran de acuerdo al orden de carga (la ultima por encima de todas)
-	    	Npc.constructor(this, 4, MOVEMENT_SPEED, "copia", new Ia());
+	    	ia = new Ia();
+	    	Npc.constructor(this, 4, MOVEMENT_SPEED, "copia", ia);
 	    	
 	        cell = map[o][p];	//inicializacion de celda actual (si el DebugSystem lanza errores posiblemente es porque se inicia antes que esto(muy improbable))
 	        
@@ -75,8 +76,12 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	        Map<Integer, Coor> coors2 = Collections.synchronizedSortedMap(new TreeMap<Integer, Coor>()); 
 	        ImageIcon a = new ImageIcon("bosque.png");
 		    Image b = a.getImage();
-		    images2.put(2, b);
-		    coors2.put(2, new Coor(0,0));
+		    ImageIcon a1 = new ImageIcon("1.png");
+		    Image b1 = a.getImage();
+		    images2.put(1, b);
+		    images2.put(2, b1);
+		    coors2.put(1, new Coor(0,0));
+		    coors2.put(2, new Coor(420,310));
 		    Coor[][] map2 = new Mapper(200,200,this).init();
 	        Mapp.constructor(1, 200, 200, images2, coors2, map2);
 	        /*Nuevo metodo de limitacion de mapas*/ //Se bloquean las celdas exteriores del mapa
