@@ -39,7 +39,7 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	static final int RENDER_SPEED = 5;	//velocidad de renderizado(velocidad de refresco de la pantalla y todas las acciones que implica un frame)
 	private int anim = 0;	//variable para animacion
 	boolean anima = true,animac = true, movv = true;	//variable para animacion
-	private int o=27,p=42;	//coordenada actual;
+	private int o=0,p=0;	//coordenada actual;
 	private String move;
 	public int public_o = o, public_p = p;	//copia publica (igual que publicCell)
 	//private boolean end;	legacy variable
@@ -54,51 +54,62 @@ public class Board extends JPanel implements Runnable, ActionListener{
 		}*/
 	
 	    public Board() {
-	    	public_MaxMapX = MaxMapX;
-	    	public_MaxMapY = MaxMapY;
-	    	images = Collections.synchronizedSortedMap(new TreeMap<Integer, Image>()); 
-	    	coors = Collections.synchronizedSortedMap(new TreeMap<Integer, Coor>()); 
-	    	map = new Mapper(MaxMapX,MaxMapY,this).init();	//mapeo
 	    	setDoubleBuffered(true);	//se requiere un buffer de dibujo el cual se dibuja finalmente en pantalla (cuestiones menores de refresco de pantalla)
-	    	
-	    	/*Cargamos imagenes*/ //IMPORTANTE las ids de las imagenes van de 2 para abajo (pueden ser negativas)
-	    	newImage(2,"2.gif", new Coor(420,310));		//anadimos un par de fondos
-	    	newImage(1,"bosque.png", new Coor(-300,-300));
-	    	newImage(3,"abajo_quieto.png", new Coor(0,0));	//las imagenes se superpondran de acuerdo al orden de carga (la ultima por encima de todas)
-	    	ia = new Ia();
-	    	Npc.constructor(this, 4, MOVEMENT_SPEED, "copia", ia);
-	    	
-	        cell = map[o][p];	//inicializacion de celda actual (si el DebugSystem lanza errores posiblemente es porque se inicia antes que esto(muy improbable))
 	        
 	        
 	        
-	        Map<Integer, Image> images2 = Collections.synchronizedSortedMap(new TreeMap<Integer, Image>()); 
-	        Map<Integer, Coor> coors2 = Collections.synchronizedSortedMap(new TreeMap<Integer, Coor>()); 
-	        ImageIcon a = new ImageIcon("bosque.png");
-		    Image b = a.getImage();
-		    ImageIcon a1 = new ImageIcon("1.png");
+	        Map<Integer, Image> images3 = Collections.synchronizedSortedMap(new TreeMap<Integer, Image>()); 
+	        Map<Integer, Coor> coors3 = Collections.synchronizedSortedMap(new TreeMap<Integer, Coor>()); 
+	        ImageIcon a2 = new ImageIcon("2.gif");
+		    Image b2 = a2.getImage();
+	        ImageIcon a3 = new ImageIcon("bosque.png");
+		    Image b3 = a3.getImage();
+		    ImageIcon a1 = new ImageIcon("abajo_quieto.png");
 		    Image b1 = a1.getImage();
-		    images2.put(1, b);
-		    images2.put(2, b1);
-		    coors2.put(1, new Coor(0,0));
-		    coors2.put(2, new Coor(420,310));
-		    Coor[][] map2 = new Mapper(200,200,this).init();
-	        Mapp.constructor(1, 200, 200, images2, coors2, map2);
+		    images3.put(-2, b3);
+		    images3.put(-1, b2);
+		    images3.put(3, b1);
+		    coors3.put(3, new Coor(0,0));
+		    coors3.put(-1, new Coor(420,310));
+		    coors3.put(-2, new Coor(-300,-300));
+		    Coor[][] map3 = new Mapper(800,800,this).init();
+	        Mapp.constructor(2, 800, 800, images3, coors3, map3, 2, 2);
 	        /*Nuevo metodo de limitacion de mapas*/ //Se bloquean las celdas exteriores del mapa
+	        
+	        changeMap();
 	    }
+	    
+	    public void create_map(){
+	    	Map<Integer, Image> images3 = Collections.synchronizedSortedMap(new TreeMap<Integer, Image>()); 
+	        Map<Integer, Coor> coors3 = Collections.synchronizedSortedMap(new TreeMap<Integer, Coor>()); 
+	        int num_images = Integer.parseInt(JOptionPane.showInputDialog("Numero de imagenes: "));
+	        for(int i=0;i<num_images;i++){
+	        	ImageIcon a2 = new ImageIcon(JOptionPane.showInputDialog("Ruta de imagen: "));
+	        	Image b2 = a2.getImage();
+	        	int ID = Integer.parseInt(JOptionPane.showInputDialog("ID de imagen: "));
+	        	images3.put(ID, b2);
+	        	coors3.put(ID, new Coor(Integer.parseInt(JOptionPane.showInputDialog("Coordenada X: ")),Integer.parseInt(JOptionPane.showInputDialog("Coordenada Y: "))));
+	        }
+	        int mapx = Integer.parseInt(JOptionPane.showInputDialog("Anchura del mapa: "));
+	        int mapy = Integer.parseInt(JOptionPane.showInputDialog("Altura del mapa: "));
+		    Coor[][] map3 = new Mapper(mapx,mapy,this).init();
+	        Mapp.constructor(2, mapx, mapy, images3, coors3, map3, Integer.parseInt(JOptionPane.showInputDialog("X de inicio: ")), Integer.parseInt(JOptionPane.showInputDialog("Y de inicio: ")));
+	    }
+	    
 	    
 	    
 	    public void changeMap(){
-	    	Mapp.changeMap(Integer.parseInt(JOptionPane.showInputDialog("ID del mapa: ")));
-	    }
-	    
-	    public void new_map(int dimensionX, int dimensionY, Map<Integer, Image> images, Map<Integer, Coor> coors, Coor[][] map){
-	    	MaxMapX = dimensionX;
-	    	MaxMapY = dimensionY;
-	    	this.images = images;
-	    	this.coors = coors;
-	    	this.map = map;
-	    	cell = map[1][1];
+	    	Mapp new_map = Mapp.changeMap(Integer.parseInt(JOptionPane.showInputDialog("ID del mapa: ")));
+	    	this.images = new_map.images();
+	    	this.coors = new_map.coors();
+	    	this.MaxMapX = new_map.MaxMapX();
+	    	this.MaxMapY = new_map.MaxMapY();
+	    	this.map = new_map.map();
+	    	this.o = new_map.init_X();
+	    	this.p = new_map.init_Y();
+	    	this.cell = map[o][p];
+	    	ia = new Ia();
+	    	Npc.constructor(this, 4, MOVEMENT_SPEED, "copia", ia);
 	    }
 	    
 	    
@@ -283,6 +294,7 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    	if(p > (MaxMapY/Mapper.cellPixels)-1){	//limite inferior
 	    		p = (MaxMapY/Mapper.cellPixels)-1;
 	    	}else{
+	    		
 	    		Coor evalCell = map[o][p];
     			if(anima){
     				if(anim == 0){
@@ -316,10 +328,10 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    
 	    
 	    public void newImage(int id, String file, Coor position){	//metodo para crear una nueva imagen
-	    	 ImageIcon a = new ImageIcon(file);
-		     Image b = a.getImage();
-		     images.put(id, b);	//anadimos la nueva imagen al mapa de imagenes junto con su id
-		     coors.put(id, position); //anadimos la posicion de la imagen junto con su id al mapa de posiciones
+	    		ImageIcon a = new ImageIcon(file);
+	    		Image b = a.getImage();
+	    		images.put(id, b);	//anadimos la nueva imagen al mapa de imagenes junto con su id
+	    		coors.put(id, position); //anadimos la posicion de la imagen junto con su id al mapa de posiciones
 	    }
 	    
 	    public void destroyImage(int id){

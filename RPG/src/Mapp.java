@@ -4,20 +4,19 @@ import java.util.TreeMap;
 
 
 public class Mapp {
-	private int MaxMapX, MaxMapY;
+	private int MaxMapX, MaxMapY, o, p;
 	private Map<Integer, Image> images;
 	private Map<Integer, Coor> coors;
 	private Coor[][] map;
 	private int ID;
-	private Coor cell;
 	private static Map<Integer, Mapp> maps = null;
 
-	public static void constructor(int ID, int dimensionX, int dimensionY, Map<Integer, Image> images, Map<Integer, Coor> coors, Coor[][] map){
+	public static void constructor(int ID, int dimensionX, int dimensionY, Map<Integer, Image> images, Map<Integer, Coor> coors, Coor[][] map, int initX, int initY){
 		if(maps != null){
-			Mapp mp = new Mapp(ID, dimensionX, dimensionY, images, coors, map);
+			Mapp mp = new Mapp(ID, dimensionX, dimensionY, images, coors, map, initX, initY);
 			maps.put(ID, mp);
 		}else{
-			Mapp mp = new Mapp(ID, dimensionX, dimensionY, images, coors, map);
+			Mapp mp = new Mapp(ID, dimensionX, dimensionY, images, coors, map, initX, initY);
 			maps = new TreeMap<Integer, Mapp>();
 			maps.put(ID, mp);
 		}
@@ -27,15 +26,15 @@ public class Mapp {
 		return maps.get(ID);
 	}
 	
-	private Mapp(int ID, int dimensionX, int dimensionY, Map<Integer, Image> images, Map<Integer, Coor> coors, Coor[][] map){
-		MaxMapX = dimensionX;
-    	MaxMapY = dimensionY;
+	private Mapp(int ID, int dimensionX, int dimensionY, Map<Integer, Image> images, Map<Integer, Coor> coors, Coor[][] map, int initX, int initY){
+		this.MaxMapX = dimensionX;
+    	this.MaxMapY = dimensionY;
     	this.ID = ID;
     	this.images = images;
     	this.coors = coors;
     	this.map = map;
-    	cell = map[2][2];
-    	
+    	this.o = initX;
+    	this.p = initY;
 	}
 	
 	public int MaxMapX(){
@@ -62,8 +61,11 @@ public class Mapp {
 		return map;
 	}
 	
-	public Coor init_cell(){
-		return cell;
+	public int init_X(){
+		return o;
+	}
+	public int init_Y(){
+		return p;
 	}
 }
 
