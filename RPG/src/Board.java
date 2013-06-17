@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -82,6 +83,7 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    }
 	    
 	    public void create_map(){
+	    	new JFileChooser().showOpenDialog(this);
 	    	Map<Integer, Image> images3 = Collections.synchronizedSortedMap(new TreeMap<Integer, Image>()); 
 	        Map<Integer, Coor> coors3 = Collections.synchronizedSortedMap(new TreeMap<Integer, Coor>()); 
 	        int num_images = Integer.parseInt(JOptionPane.showInputDialog("Numero de imagenes: "));

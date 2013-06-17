@@ -31,7 +31,7 @@ public class Skeleton extends JFrame implements KeyListener {
     	Board a = new Board();	//inicializacion graficos
     	db = new DebugSystem(a);		//inicializacion debugger
     	new Skeleton(a);		//inicializacion ventana
-    	JOptionPane.showMessageDialog(null, "Controles de movimiento: WASD\nEliminar npc: B\nVer pixeles de coordenada: M\nCambiar estado de celda: N\nCambiar mapa: V\nCrear nuevo mapa: C");
+    	JOptionPane.showMessageDialog(null, "Controles de movimiento: WASD\nEliminar npc: R\nVer pixeles de coordenada: P\nCambiar estado de celda: C\nCambiar mapa: N\nCrear nuevo mapa: M");
     }
     /*
      * 
@@ -53,7 +53,7 @@ public class Skeleton extends JFrame implements KeyListener {
 		if(arg0.getKeyCode() == KeyEvent.VK_W){		//movimiento hacia arriba (W)
 			a.mov("U");
 		}
-		if(arg0.getKeyCode() == KeyEvent.VK_M){
+		if(arg0.getKeyCode() == KeyEvent.VK_P){
 			db.print_map();
 		}
 		if(arg0.getKeyCode() == KeyEvent.VK_I){
@@ -68,16 +68,16 @@ public class Skeleton extends JFrame implements KeyListener {
 		if(arg0.getKeyCode() == KeyEvent.VK_L){
 			a.ia.nextMov1 = "R";
 		}
-		if(arg0.getKeyCode() == KeyEvent.VK_V){
+		if(arg0.getKeyCode() == KeyEvent.VK_N){
 			a.changeMap();
 		}
-		if(arg0.getKeyCode() == KeyEvent.VK_C){
+		if(arg0.getKeyCode() == KeyEvent.VK_M){
 			a.create_map();
 		}
-		if(arg0.getKeyCode() == KeyEvent.VK_B){
+		if(arg0.getKeyCode() == KeyEvent.VK_R){
 			db.remove_npc(Integer.parseInt(JOptionPane.showInputDialog("ID:")));
 		}
-		if(arg0.getKeyCode() == KeyEvent.VK_N){
+		if(arg0.getKeyCode() == KeyEvent.VK_C){
 			JOptionPane.showMessageDialog(null, "ATENCION! la herramienta de debug no esta limitada, lo que implica que si te sales de los limites saltaran errores criticos");
 			int x = Integer.parseInt(JOptionPane.showInputDialog("X:"));
 			int y = Integer.parseInt(JOptionPane.showInputDialog("Y:"));
