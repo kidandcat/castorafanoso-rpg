@@ -77,6 +77,8 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	        /*Nuevo metodo de limitacion de mapas*/ //Se bloquean las celdas exteriores del mapa
 	        
 	        changeMap();
+	        ia = new Ia();
+	    	Npc.constructor(this, 4, MOVEMENT_SPEED, "copia", ia);
 	    }
 	    
 	    public void create_map(){
@@ -93,7 +95,7 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	        int mapx = Integer.parseInt(JOptionPane.showInputDialog("Anchura del mapa: "));
 	        int mapy = Integer.parseInt(JOptionPane.showInputDialog("Altura del mapa: "));
 		    Coor[][] map3 = new Mapper(mapx,mapy,this).init();
-	        Mapp.constructor(2, mapx, mapy, images3, coors3, map3, Integer.parseInt(JOptionPane.showInputDialog("X de inicio: ")), Integer.parseInt(JOptionPane.showInputDialog("Y de inicio: ")));
+	        Mapp.constructor(Integer.parseInt(JOptionPane.showInputDialog("ID del mapa: ")), mapx, mapy, images3, coors3, map3, Integer.parseInt(JOptionPane.showInputDialog("X de inicio: ")), Integer.parseInt(JOptionPane.showInputDialog("Y de inicio: ")));
 	    }
 	    
 	    
@@ -108,8 +110,8 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    	this.o = new_map.init_X();
 	    	this.p = new_map.init_Y();
 	    	this.cell = map[o][p];
-	    	ia = new Ia();
-	    	Npc.constructor(this, 4, MOVEMENT_SPEED, "copia", ia);
+	    	Npc.set_list(new_map.npcs());
+	    	
 	    }
 	    
 	    

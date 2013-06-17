@@ -37,6 +37,10 @@ public class Npc implements ActionListener{
 		return npcs;
 	}
 	
+	public static void set_list(Set<Npc> npcs){
+		Npc.npcs = npcs;
+	}
+	
 	public void destroy(){
 		timer.stop();
 		ia.destroy();

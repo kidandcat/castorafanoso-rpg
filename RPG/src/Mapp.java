@@ -1,5 +1,6 @@
 import java.awt.Image;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 
@@ -10,6 +11,7 @@ public class Mapp {
 	private Coor[][] map;
 	private int ID;
 	private static Map<Integer, Mapp> maps = null;
+	private Set<Npc> npcs = null;
 
 	public static void constructor(int ID, int dimensionX, int dimensionY, Map<Integer, Image> images, Map<Integer, Coor> coors, Coor[][] map, int initX, int initY){
 		if(maps != null){
@@ -35,6 +37,11 @@ public class Mapp {
     	this.map = map;
     	this.o = initX;
     	this.p = initY;
+    	npcs = Npc.list();
+    	Npc.set_list(null);
+	}
+	public Set<Npc> npcs(){
+		return npcs;
 	}
 	
 	public int MaxMapX(){
