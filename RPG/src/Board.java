@@ -9,6 +9,7 @@
 
 //clase encargada del renderizado asi como del movimiento
 
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -23,8 +24,10 @@ import java.util.TreeMap;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.Timer;
 import javax.swing.UIManager;
 
@@ -85,6 +88,7 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    }
 	    
 	    public void create_map(){
+	    	try{
 	    	Map<Integer, Image> images3 = Collections.synchronizedSortedMap(new TreeMap<Integer, Image>()); 
 	        Map<Integer, Coor> coors3 = Collections.synchronizedSortedMap(new TreeMap<Integer, Coor>()); 
 	        int num_images = Integer.parseInt(JOptionPane.showInputDialog("Numero de imagenes: "));
@@ -99,22 +103,39 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	        int mapy = Integer.parseInt(JOptionPane.showInputDialog("Altura del mapa: "));
 		    Coor[][] map3 = new Mapper(mapx,mapy,this).init();
 	        Mapp.constructor(Integer.parseInt(JOptionPane.showInputDialog("ID del mapa: ")), mapx, mapy, images3, coors3, map3, Integer.parseInt(JOptionPane.showInputDialog("X de inicio: ")), Integer.parseInt(JOptionPane.showInputDialog("Y de inicio: ")));
+	    	}catch(Exception e){
+	    		JOptionPane.showMessageDialog(this, "Error creando mapa");
+	    		JOptionPane.showMessageDialog(this, e.getStackTrace());
+	    	}
 	    }
 	    
 	    
 	    
 	    public void changeMap(){
-	    	Mapp new_map = Mapp.changeMap(Integer.parseInt(JOptionPane.showInputDialog("ID del mapa: ")));
-	    	this.images = new_map.images();
-	    	this.coors = new_map.coors();
-	    	this.MaxMapX = new_map.MaxMapX();
-	    	this.MaxMapY = new_map.MaxMapY();
-	    	this.map = new_map.map();
-	    	this.o = new_map.init_X();
-	    	this.p = new_map.init_Y();
-	    	this.cell = map[o][p];
-	    	Npc.set_list(new_map.npcs());
-	    	
+	    	try{
+	    		Mapp new_map = Mapp.changeMap(Integer.parseInt(JOptionPane.showInputDialog("ID del mapa: ")));
+	    		this.images = new_map.images();
+	    		Progress_bar bar = new Progress_bar();
+	    		bar.set(1);
+	    		this.coors = new_map.coors();
+	    		bar.set(2);
+	    		this.MaxMapX = new_map.MaxMapX();
+	    		bar.set(3);
+	    		this.MaxMapY = new_map.MaxMapY();
+	    		bar.set(4);
+	    		this.map = new_map.map();
+	    		bar.set(5);
+	    		this.o = new_map.init_X();
+	    		bar.set(6);
+	    		this.p = new_map.init_Y();
+	    		bar.set(7);
+	    		this.cell = map[o][p];
+	    		bar.set(8);
+	    		Npc.set_list(new_map.npcs());
+	    		bar.set(9);
+	    	}catch (Exception e){
+	    		JOptionPane.showMessageDialog(this, "ID invalida");
+	    	}
 	    }
 	    
 	    
@@ -397,6 +418,41 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    	   return null;
 	       }
 		}
+		
+		
+}
+
+@SuppressWarnings("serial")
+class Progress_bar extends JFrame implements ActionListener{
+	JProgressBar current;
+	
+	public Progress_bar(){
+		setTitle("Loading...");
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setSize(200, 90);
+		//setLocationRelativeTo(null);
+		setVisible(true);
+		setResizable(false);
+		JPanel pane = new JPanel();
+		pane.setLayout(new FlowLayout());
+		current = new JProgressBar(0, 9); // Crear un JProgressBar con valores 0-2000
+		current.setValue(0); // Fijar valor por defecto.
+		current.setStringPainted(true); // Mostrar valor numérico del progreso de la barra
+		pane.add(current);
+		setContentPane(pane);
+		Timer timer = new Timer(100, this);	//tiempo de actualizacion de las variables del debug 
+        timer.start();	//IMPORTANTE es aqui donde hay una baja probabilidad de error fatal si este metodo se ejecuta antes de la inicializacion del Board
+	}
+	
+	public void set(int i){
+		current.setValue(i);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		if(current.getValue() == 9)
+			this.dispose();
+	}
 }
 
 

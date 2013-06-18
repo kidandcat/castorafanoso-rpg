@@ -46,6 +46,7 @@ public class Npc implements ActionListener{
 		ia.destroy();
 		npcs.remove(this);
 		a.destroyImage(ID);
+		a.map[o][p].setAllow(true);
 	}
 	
 	public int ID(){
