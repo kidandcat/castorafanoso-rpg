@@ -79,12 +79,12 @@ public class Board extends JPanel implements Runnable, ActionListener{
 		    coors3.put(-1, new Coor(420,310));
 		    coors3.put(-2, new Coor(-300,-300));
 		    Coor[][] map3 = new Mapper(800,800,this).init();
-	        Mapp.constructor(1, 800, 800, images3, coors3, map3, 2, 2);
+	        Mapp.constructor(1, 800, 800, images3, coors3, map3, 1, 20);
 	        /*Nuevo metodo de limitacion de mapas*/ //Se bloquean las celdas exteriores del mapa
 	        
-	        changeMap();
+	        changeMap(1);
 	        ia = new Ia();
-	    	Npc.constructor(this, 4, MOVEMENT_SPEED, "copia", ia);
+	    	Npc.constructor(this, 4, MOVEMENT_SPEED, "copia", ia, 4, 20);
 	    }
 	    
 	    public void create_map(){
@@ -136,6 +136,19 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    	}catch (Exception e){
 	    		JOptionPane.showMessageDialog(this, "ID invalida");
 	    	}
+	    }
+	    
+	    public void changeMap(int ID){
+	    		Mapp new_map = Mapp.changeMap(ID);
+	    		this.images = new_map.images();
+	    		this.coors = new_map.coors();
+	    		this.MaxMapX = new_map.MaxMapX();
+	    		this.MaxMapY = new_map.MaxMapY();
+	    		this.map = new_map.map();
+	    		this.o = new_map.init_X();
+	    		this.p = new_map.init_Y();
+	    		this.cell = map[o][p];
+	    		Npc.set_list(new_map.npcs());
 	    }
 	    
 	    

@@ -21,14 +21,14 @@ public class Npc implements ActionListener{
 	private Timer timer;
 	private static Set<Npc> npcs = null;	//set estatico donde se almacenan todos los npcs para su localizacion (a implementar: una id por npc para poder localizarlos en el set(cambiar el set por un mapa))
 	
-	public static Npc constructor(Board a, int ID, int MOVEMENT_SPEED, String i, Ia ia){
+	public static Npc constructor(Board a, int ID, int MOVEMENT_SPEED, String i, Ia ia, int initX, int initY){
 		if(npcs != null){
-			Npc n = new Npc(a, ID, i, ia);
+			Npc n = new Npc(a, ID, i, ia, initX, initY);
 			npcs.add(n);
 			return n;
 		}else{
 			npcs = new HashSet<Npc>();
-			Npc n = new Npc(a, ID, i, ia);
+			Npc n = new Npc(a, ID, i, ia, initX, initY);
 			npcs.add(n);
 			return n;
 		}
@@ -53,7 +53,9 @@ public class Npc implements ActionListener{
 		return ID;
 	}
 	
-	private Npc(Board a, int ID, String i, Ia ia){
+	private Npc(Board a, int ID, String i, Ia ia, int initX, int initY){
+		this.o = initX;
+		this.p = initY;
 		this.ia = ia;
 		this.ID = ID;
 		this.a = a;

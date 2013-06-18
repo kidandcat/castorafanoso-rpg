@@ -44,11 +44,10 @@ public class DebugSystem extends JFrame implements ActionListener{
 	}
 	
 	public void print_map(){
-		JOptionPane.showMessageDialog(null, "ATENCION! la herramienta de debug no esta limitada, lo que implica que si te sales de los limites saltaran errores criticos");
-		int i = Integer.parseInt(JOptionPane.showInputDialog("X: "));
-		int e = Integer.parseInt(JOptionPane.showInputDialog("Y: "));
+		int i = a.public_o;
+		int e = a.public_p;
 		try{
-			JOptionPane.showMessageDialog(null, e + " " + i + " " + a.map[i][e].toString());
+			JOptionPane.showMessageDialog(null, i + " " + e + " " + a.map[i][e].toString());
 		}catch(Exception e2){
 			JOptionPane.showMessageDialog(null, e2.toString());
 		}	
