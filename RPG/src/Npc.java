@@ -77,15 +77,7 @@ public class Npc implements ActionListener{
 	}
 	
 	private synchronized void moveD(){
-    	if(!anima)
-    	p++;
-    	if(p < 0){	//limite superior
-    		p = 0;
-    		anima = true;
-    	}else{
-    	if(p > (a.public_MaxMapY/Mapper.cellPixels)-1){	//limite inferior
-    		p = (a.public_MaxMapY/Mapper.cellPixels)-1;
-    	}else{
+		if(a.map[o][p+1].isAllow()){
 			if(anima){
 				if(anim == 0){
 					a.newImage(ID, "abajo_andando_" + nombre + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310 +7), p);
@@ -96,31 +88,22 @@ public class Npc implements ActionListener{
 					anima = false;
 					anim--;
 				}
-    	    }else if(a.map[o][p].isAllow()){
-				a.map[o][p].setAllow(false);
+    	    }else{
+				a.map[o][p].setAllow(true);
+				p++;
 				a.newImage(ID, "abajo_quieto_" + nombre + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310), p);
 				anima = true;
-				a.map[o][p-1].setAllow(true);
-			}else{
+				a.map[o][p].setAllow(false);
+			}
+		}else{
 				anima = true;
-				a.newImage(ID, "abajo_quieto_" + nombre + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310 -Mapper.cellPixels), p);
-				p--;
+				a.newImage(ID, "abajo_quieto_" + nombre + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310), p);
 		}
 	}
-	}
-    }
+	
 	
 	private synchronized void moveU(){
-    	if(!anima)
-    	p--;
-    	if(p < 0){	//limite superior
-    		p = 0;
-    		anima = true;
-    	}else{
-    	if(p > (a.public_MaxMapY/Mapper.cellPixels)-1){	//limite inferior
-    		p = (a.public_MaxMapY/Mapper.cellPixels)-1;
-    	}else{
-    		Coor evalCell = a.map[o][p];
+		if(a.map[o][p-1].isAllow()){
 			if(anima){
 				if(anim == 0){
 					a.newImage(ID, "arriba_andando_" + nombre + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310 -7), p);
@@ -131,90 +114,69 @@ public class Npc implements ActionListener{
 					anima = false;
 					anim--;
 				}
-    	    }else if(evalCell.isAllow()){
-    	    	a.map[o][p].setAllow(false);
+    	    }else{
+				a.map[o][p].setAllow(true);
+				p--;
 				a.newImage(ID, "arriba_quieto_" + nombre + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310), p);
 				anima = true;
-				a.map[o][p+1].setAllow(true);
-			}else{
+				a.map[o][p].setAllow(false);
+			}
+		}else{
 				anima = true;
-				a.newImage(ID, "arriba_quieto_" + nombre + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310 +Mapper.cellPixels), p);
-				p++;
+				a.newImage(ID, "arriba_quieto_" + nombre + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310), p);
 		}
-	}
-	}
     }
 
 	
 	private synchronized void moveL(){
-    	if(!anima)
-    	o--;
-    	if(p < 0){	//limite superior
-    		p = 0;
-    		anima = true;
-    	}else{
-    	if(p > (a.public_MaxMapY/Mapper.cellPixels)-1){	//limite inferior
-    		p = (a.public_MaxMapY/Mapper.cellPixels)-1;
-    	}else{
-    		Coor evalCell = a.map[o][p];
+		if(a.map[o-1][p].isAllow()){
 			if(anima){
 				if(anim == 0){
-					a.newImage(ID, "izquierda_andando_" + nombre + ".png", new Coor(o*Mapper.cellPixels-7 + 420,p*Mapper.cellPixels + 310), p);
+					a.newImage(ID, "izquierda_andando_" + nombre + ".png", new Coor(o*Mapper.cellPixels + 420 -7,p*Mapper.cellPixels + 310), p);
 					anima = false;
 					anim++;
 				}else{
-					a.newImage(ID, "izquierda_andando2_" + nombre + ".png", new Coor(o*Mapper.cellPixels-7 + 420,p*Mapper.cellPixels + 310), p);
+					a.newImage(ID, "izquierda_andando2_" + nombre + ".png", new Coor(o*Mapper.cellPixels + 420 -7,p*Mapper.cellPixels + 310), p);
 					anima = false;
 					anim--;
 				}
-    	    }else if(evalCell.isAllow()){
-    	    	a.map[o][p].setAllow(false);
+    	    }else{
+				a.map[o][p].setAllow(true);
+				o--;
 				a.newImage(ID, "izquierda_quieto_" + nombre + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310), p);
 				anima = true;
-				a.map[o+1][p].setAllow(true);
-			}else{
+				a.map[o][p].setAllow(false);
+			}
+		}else{
 				anima = true;
-				a.newImage(ID, "izquierda_quieto_" + nombre + ".png", new Coor(o*Mapper.cellPixels+Mapper.cellPixels + 420,p*Mapper.cellPixels + 310), p);
-				o++;
+				a.newImage(ID, "izquierda_quieto_" + nombre + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310), p);
 		}
-	}
-	}
     }
 	
 	
 	private synchronized void moveR(){
-    	if(!anima)
-    	o++;
-    	if(p < 0){	//limite superior
-    		p = 0;
-    		anima = true;
-    	}else{
-    	if(p > (a.public_MaxMapY/Mapper.cellPixels)-1){	//limite inferior
-    		p = (a.public_MaxMapY/Mapper.cellPixels)-1;
-    	}else{
-    		Coor evalCell = a.map[o][p];
+		if(a.map[o+1][p].isAllow()){
 			if(anima){
 				if(anim == 0){
-					a.newImage(ID, "derecha_andando_" + nombre + ".png", new Coor(o*Mapper.cellPixels+7 + 420,p*Mapper.cellPixels + 310), p);
+					a.newImage(ID, "derecha_andando_" + nombre + ".png", new Coor(o*Mapper.cellPixels + 420 +7,p*Mapper.cellPixels + 310), p);
 					anima = false;
 					anim++;
 				}else{
-					a.newImage(ID, "derecha_andando2_" + nombre + ".png", new Coor(o*Mapper.cellPixels+7 + 420,p*Mapper.cellPixels + 310), p);
+					a.newImage(ID, "derecha_andando2_" + nombre + ".png", new Coor(o*Mapper.cellPixels + 420 +7,p*Mapper.cellPixels + 310), p);
 					anima = false;
 					anim--;
 				}
-    	    }else if(evalCell.isAllow()){
-    	    	a.map[o][p].setAllow(false);
+    	    }else{
+				a.map[o][p].setAllow(true);
+				o++;
 				a.newImage(ID, "derecha_quieto_" + nombre + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310), p);
 				anima = true;
-				a.map[o-1][p].setAllow(true);
-			}else{
+				a.map[o][p].setAllow(false);
+			}
+		}else{
 				anima = true;
-				a.newImage(ID, "derecha_quieto_" + nombre + ".png", new Coor(o*Mapper.cellPixels-Mapper.cellPixels + 420,p*Mapper.cellPixels + 310), p);
-				o--;
+				a.newImage(ID, "derecha_quieto_" + nombre + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310), p);
 		}
-	}
-	}
     }
 	
 	private void move(String s){	//inicia los metodos necesarios para moverse en la direccion indicada;
