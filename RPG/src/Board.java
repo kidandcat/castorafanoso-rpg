@@ -15,14 +15,12 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -78,7 +76,7 @@ public class Board extends JPanel implements Runnable, ActionListener{
 		    coors3.put(-1, new Coor(420,310));
 		    coors3.put(-2, new Coor(-300,-300));
 		    Coor[][] map3 = new Mapper(800,800,this).init();
-	        Mapp.constructor(2, 800, 800, images3, coors3, map3, 2, 2);
+	        Mapp.constructor(1, 800, 800, images3, coors3, map3, 2, 2);
 	        /*Nuevo metodo de limitacion de mapas*/ //Se bloquean las celdas exteriores del mapa
 	        
 	        changeMap();

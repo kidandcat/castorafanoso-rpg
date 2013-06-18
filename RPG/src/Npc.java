@@ -10,7 +10,7 @@ import javax.swing.Timer;
 
 public class Npc implements ActionListener{
 	private Board a;
-	private String i;
+	private String nombre;
 	int o = 1,p = 2;
 	private boolean anima = true, animac = true;
 	private String nextMov = "", move = "";
@@ -56,7 +56,7 @@ public class Npc implements ActionListener{
 		this.ia = ia;
 		this.ID = ID;
 		this.a = a;
-		this.i = i;
+		this.nombre = i;
         a.newImage(ID, "abajo_quieto_" + i + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310));
         timer = new Timer(a.MOVEMENT_SPEED/2, this);	//crea un timer que ejecutara el ActionListener de esta clase cada vez que pase el tiempo indicado
         timer.start();
@@ -83,22 +83,22 @@ public class Npc implements ActionListener{
     	}else{
 			if(anima){
 				if(anim == 0){
-					a.newImage(ID, "abajo_andando_" + i + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310 +7));
+					a.newImage(ID, "abajo_andando_" + nombre + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310 +7));
 					anima = false;
 					anim++;
 				}else{
-					a.newImage(ID, "abajo_andando2_" + i + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310 +7));
+					a.newImage(ID, "abajo_andando2_" + nombre + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310 +7));
 					anima = false;
 					anim--;
 				}
     	    }else if(a.map[o][p].isAllow()){
 				a.map[o][p].setAllow(false);
-				a.newImage(ID, "abajo_quieto_" + i + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310));
+				a.newImage(ID, "abajo_quieto_" + nombre + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310));
 				anima = true;
 				a.map[o][p-1].setAllow(true);
 			}else{
 				anima = true;
-				a.newImage(ID, "abajo_quieto_" + i + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310 -Mapper.cellPixels));
+				a.newImage(ID, "abajo_quieto_" + nombre + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310 -Mapper.cellPixels));
 				p--;
 		}
 	}
@@ -118,22 +118,22 @@ public class Npc implements ActionListener{
     		Coor evalCell = a.map[o][p];
 			if(anima){
 				if(anim == 0){
-					a.newImage(ID, "arriba_andando_" + i + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310 -7));
+					a.newImage(ID, "arriba_andando_" + nombre + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310 -7));
 					anima = false;
 					anim++;
 				}else{
-					a.newImage(ID, "arriba_andando2_" + i + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310 -7));
+					a.newImage(ID, "arriba_andando2_" + nombre + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310 -7));
 					anima = false;
 					anim--;
 				}
     	    }else if(evalCell.isAllow()){
     	    	a.map[o][p].setAllow(false);
-				a.newImage(ID, "arriba_quieto_" + i + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310));
+				a.newImage(ID, "arriba_quieto_" + nombre + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310));
 				anima = true;
 				a.map[o][p+1].setAllow(true);
 			}else{
 				anima = true;
-				a.newImage(ID, "arriba_quieto_" + i + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310 +Mapper.cellPixels));
+				a.newImage(ID, "arriba_quieto_" + nombre + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310 +Mapper.cellPixels));
 				p++;
 		}
 	}
@@ -154,22 +154,22 @@ public class Npc implements ActionListener{
     		Coor evalCell = a.map[o][p];
 			if(anima){
 				if(anim == 0){
-					a.newImage(ID, "izquierda_andando_" + i + ".png", new Coor(o*Mapper.cellPixels-7 + 420,p*Mapper.cellPixels + 310));
+					a.newImage(ID, "izquierda_andando_" + nombre + ".png", new Coor(o*Mapper.cellPixels-7 + 420,p*Mapper.cellPixels + 310));
 					anima = false;
 					anim++;
 				}else{
-					a.newImage(ID, "izquierda_andando2_" + i + ".png", new Coor(o*Mapper.cellPixels-7 + 420,p*Mapper.cellPixels + 310));
+					a.newImage(ID, "izquierda_andando2_" + nombre + ".png", new Coor(o*Mapper.cellPixels-7 + 420,p*Mapper.cellPixels + 310));
 					anima = false;
 					anim--;
 				}
     	    }else if(evalCell.isAllow()){
     	    	a.map[o][p].setAllow(false);
-				a.newImage(ID, "izquierda_quieto_" + i + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310));
+				a.newImage(ID, "izquierda_quieto_" + nombre + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310));
 				anima = true;
 				a.map[o+1][p].setAllow(true);
 			}else{
 				anima = true;
-				a.newImage(ID, "izquierda_quieto_" + i + ".png", new Coor(o*Mapper.cellPixels+Mapper.cellPixels + 420,p*Mapper.cellPixels + 310));
+				a.newImage(ID, "izquierda_quieto_" + nombre + ".png", new Coor(o*Mapper.cellPixels+Mapper.cellPixels + 420,p*Mapper.cellPixels + 310));
 				o++;
 		}
 	}
@@ -190,22 +190,22 @@ public class Npc implements ActionListener{
     		Coor evalCell = a.map[o][p];
 			if(anima){
 				if(anim == 0){
-					a.newImage(ID, "derecha_andando_" + i + ".png", new Coor(o*Mapper.cellPixels+7 + 420,p*Mapper.cellPixels + 310));
+					a.newImage(ID, "derecha_andando_" + nombre + ".png", new Coor(o*Mapper.cellPixels+7 + 420,p*Mapper.cellPixels + 310));
 					anima = false;
 					anim++;
 				}else{
-					a.newImage(ID, "derecha_andando2_" + i + ".png", new Coor(o*Mapper.cellPixels+7 + 420,p*Mapper.cellPixels + 310));
+					a.newImage(ID, "derecha_andando2_" + nombre + ".png", new Coor(o*Mapper.cellPixels+7 + 420,p*Mapper.cellPixels + 310));
 					anima = false;
 					anim--;
 				}
     	    }else if(evalCell.isAllow()){
     	    	a.map[o][p].setAllow(false);
-				a.newImage(ID, "derecha_quieto_" + i + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310));
+				a.newImage(ID, "derecha_quieto_" + nombre + ".png", new Coor(o*Mapper.cellPixels + 420,p*Mapper.cellPixels + 310));
 				anima = true;
 				a.map[o-1][p].setAllow(true);
 			}else{
 				anima = true;
-				a.newImage(ID, "derecha_quieto_" + i + ".png", new Coor(o*Mapper.cellPixels-Mapper.cellPixels + 420,p*Mapper.cellPixels + 310));
+				a.newImage(ID, "derecha_quieto_" + nombre + ".png", new Coor(o*Mapper.cellPixels-Mapper.cellPixels + 420,p*Mapper.cellPixels + 310));
 				o--;
 		}
 	}
