@@ -47,7 +47,7 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	int public_MaxMapX;
 	int public_MaxMapY;
 	final int MOVEMENT_SPEED = 300;	//velocidad del movimiento (solo pasos, el movimiento de renderizado es otra cosa)
-	static final int RENDER_SPEED = 5;	//velocidad de renderizado(velocidad de refresco de la pantalla y todas las acciones que implica un frame)
+	static final int RENDER_SPEED = 10;	//velocidad de renderizado(velocidad de refresco de la pantalla y todas las acciones que implica un frame)
 	private int anim = 0;	//variable para animacion
 	boolean anima = true,animac = true, movv = true;	//variable para animacion
 	private int o=0,p=0;	//coordenada actual;
@@ -218,166 +218,127 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	   
 	    private synchronized void moveR(){	//movimientos y control de limites de mapa (despues de una enorme rayada mental, todos los bordes limitados y celdas notAllow en funcionamiento)
 	    	/*debido al nuevo metodo de limite de mapa, las comprobaciones (o<0) y (o > (MaxMapX/Mapper.cellPixels)-1) quedan fuera de uso, pero permaneceran por la dificultad de limpiar todo el codigo*/
-	    	
-	    	if(!anima)	//no se cambia la posicion si es el turno de la animacion
-	    	o++;	//se avanza en una casilla
-	    	//JOptionPane.showMessageDialog(null, (MaxMapX/13)-1);	//debug method
-	    	if(o < 0){	//limite izquierdo /*Legacy*/
-	    		o = 0;	/*Legacy*/
-	    	}else{
-	    	if(o > (MaxMapX/Mapper.cellPixels)-1){	//limite derecho /*Legacy*/
-	    		o = (MaxMapX/Mapper.cellPixels)-1;	/*Legacy*/
-	    		anima = true;	//se termina la animacion
-	    		cell.undo_offsetR();	//se resetea el offset
-	    	}else{
-	    		Coor evalCell = map[o][p];	//celda de evaluacion
+	    		Coor evalCell = map[o+1][p];	//celda de evaluacion
+	    		if(evalCell.isAllow()){
 	    			if(anima){	//turno de la animacion
 	    				if(anim == 0){	//alternando entre paso izquierdo y paso derecho
-	    					newImage(ID,"derecha_andando.png",new Coor(0,0), p);//se actualiza la imagen
+	    					newImage(ID,"derecha_andando.png",new Coor(0,0), p);//se actualiza la imagen, se usa la coordenada Y(p) para posicionar la imagen en la cola de renderizado
 	    					cell.offsetR();	//offset a la celda actual para efecto de paso
 	    					anima = false;	//turno de animacion finalizado
 	    					anim++;	//alternando entre pasos
 	    				}else{
-	    					newImage(ID,"derecha_andando2.png",new Coor(0,0), p);//se actualiza la imagen
+	    					newImage(ID,"derecha_andando2.png",new Coor(0,0), p);//se actualiza la imagen, se usa la coordenada Y(p) para posicionar la imagen en la cola de renderizado
 	    					cell.offsetR();	//offset a la celda actual para efecto de paso
 	    					anima = false;	//turno de animacion finalizado
 	    					anim--; //alternando entre pasos
 	    				}
-		    	    }else if(evalCell.isAllow()){	//turno movimiento, solo si la celda a la que nos movemos esta disponible
+		    	    }else{	//turno movimiento, solo si la celda a la que nos movemos esta disponible
+		    	    	o++;
 	    				cell.undo_offsetR();	//desacemos el offset de la celda atual
 	    				cell.setAllow(true);	//la desbloqueamos
 	    				this.cell = evalCell;	//avanzamos a la siguiente celda
 	    				cell.setAllow(false);	//la bloqueamos
-	    				newImage(ID,"derecha_quieto.png",new Coor(0,0), p);//se actualiza la imagen
+	    				newImage(ID,"derecha_quieto.png",new Coor(0,0), p);//se actualiza la imagen, se usa la coordenada Y(p) para posicionar la imagen en la cola de renderizado
 	    				anima = true;	//fin turno de movimiento
-	    			}else{	//si la celda no permite el movimiento a ella
-	    				anima = true;	//fin turno movimiento
-	    				cell.undo_offsetR();	//desacemos offset
-	    				o--;	//regresamos las coordenadas a su origen
+	    			}
+	    		}else{	//si la celda no permite el movimiento a ella
+	    			newImage(ID,"derecha_quieto.png",new Coor(0,0), p);//se actualiza la imagen, se usa la coordenada Y(p) para posicionar la imagen en la cola de renderizado
+	    			anima = true;	//fin turno movimiento
+	    			cell.undo_offsetR();	//desacemos offset
 	    		}
-	    	}
-	    	}
 	    }
 	    
 	    private synchronized void moveL(){
-	    	if(!anima)
-	    	o--;
-	    	if(o < 0){	//limite izquierdo
-	    		o = 0;
-	    		anima = true;
-	    		cell.undo_offsetL();
-	    	}else{
-	    		if(o > (MaxMapX/Mapper.cellPixels)-1){	//limite derecho
-	    			o = (MaxMapX/Mapper.cellPixels)-1;
-	    		}else{
-	    			Coor evalCell = map[o][p];
-	    			if(anima){
-	    				if(anim == 0){
-	    					newImage(ID,"izquierda_andando.png",new Coor(0,0), p);
-	    					cell.offsetL();
-	    					anima = false;
-	    					anim++;
-	    				}else{
-	    					newImage(ID,"izquierda_andando2.png",new Coor(0,0), p);
-	    					cell.offsetL();
-	    					anima = false;
-	    					anim--;
-	    				}
-	    			}else if(evalCell.isAllow()){
-	    				cell.undo_offsetL();
-	    				cell.setAllow(true);
-	    				this.cell = evalCell;
-	    				cell.setAllow(false);
-	    				newImage(ID,"izquierda_quieto.png",new Coor(0,0), p);
-	    				anima = true;
-	    			}else{
-	    				anima = true;
-	    				cell.undo_offsetL();
-	    				o++;
-	    			}
-	    		}
-	    	}
+	    	Coor evalCell = map[o-1][p];	//celda de evaluacion
+    		if(evalCell.isAllow()){
+    			if(anima){	//turno de la animacion
+    				if(anim == 0){	//alternando entre paso izquierdo y paso derecho
+    					newImage(ID,"izquierda_andando.png",new Coor(0,0), p);//se actualiza la imagen, se usa la coordenada Y(p) para posicionar la imagen en la cola de renderizado
+    					cell.offsetL();	//offset a la celda actual para efecto de paso
+    					anima = false;	//turno de animacion finalizado
+    					anim++;	//alternando entre pasos
+    				}else{
+    					newImage(ID,"izquierda_andando2.png",new Coor(0,0), p);//se actualiza la imagen, se usa la coordenada Y(p) para posicionar la imagen en la cola de renderizado
+    					cell.offsetL();	//offset a la celda actual para efecto de paso
+    					anima = false;	//turno de animacion finalizado
+    					anim--; //alternando entre pasos
+    				}
+	    	    }else{	//turno movimiento, solo si la celda a la que nos movemos esta disponible
+	    	    	o--;
+    				cell.undo_offsetL();	//desacemos el offset de la celda atual
+    				cell.setAllow(true);	//la desbloqueamos
+    				this.cell = evalCell;	//avanzamos a la siguiente celda
+    				cell.setAllow(false);	//la bloqueamos
+    				newImage(ID,"izquierda_quieto.png",new Coor(0,0), p);//se actualiza la imagen, se usa la coordenada Y(p) para posicionar la imagen en la cola de renderizado
+    				anima = true;	//fin turno de movimiento
+    			}
+    		}else{	//si la celda no permite el movimiento a ella
+    			newImage(ID,"izquierda_quieto.png",new Coor(0,0), p);//se actualiza la imagen, se usa la coordenada Y(p) para posicionar la imagen en la cola de renderizado
+    			anima = true;	//fin turno movimiento
+    			cell.undo_offsetL();	//desacemos offset
+    		}
 	    }
 	    
 	    private synchronized void moveU(){
-	    	if(!anima)
-	    	p--;
-	    	if(p < 0){	//limite superior
-	    		p = 0;
-	    		anima = true;
-	    		cell.undo_offsetU();
-	    	}else{
-	    	if(p > (MaxMapY/Mapper.cellPixels)-1){	//limite inferior
-	    		p = (MaxMapY/Mapper.cellPixels)-1;
-	    	}else{
-	    		Coor evalCell = map[o][p];
-    			if(anima){
-    				if(anim == 0){
-    					newImage(ID,"arriba_andando.png",new Coor(0,0), p);
-    					cell.offsetU();
-    					anima = false;
-    					anim++;
+	    	Coor evalCell = map[o][p-1];	//celda de evaluacion
+    		if(evalCell.isAllow()){
+    			if(anima){	//turno de la animacion
+    				if(anim == 0){	//alternando entre paso izquierdo y paso derecho
+    					newImage(ID,"arriba_andando.png",new Coor(0,0), p);//se actualiza la imagen, se usa la coordenada Y(p) para posicionar la imagen en la cola de renderizado
+    					cell.offsetU();	//offset a la celda actual para efecto de paso
+    					anima = false;	//turno de animacion finalizado
+    					anim++;	//alternando entre pasos
     				}else{
-    					newImage(ID,"arriba_andando2.png",new Coor(0,0), p);
-    					cell.offsetU();
-    					anima = false;
-    					anim--;
+    					newImage(ID,"arriba_andando2.png",new Coor(0,0), p);//se actualiza la imagen, se usa la coordenada Y(p) para posicionar la imagen en la cola de renderizado
+    					cell.offsetU();	//offset a la celda actual para efecto de paso
+    					anima = false;	//turno de animacion finalizado
+    					anim--; //alternando entre pasos
     				}
-	    	    }else if(evalCell.isAllow()){
-    				cell.undo_offsetU();
-    				cell.setAllow(true);
-    				this.cell = evalCell;
-    				cell.setAllow(false);
-    				newImage(ID,"arriba_quieto.png",new Coor(0,0), p);
-    				anima = true;
-    			}else{
-    				anima = true;
-    				cell.undo_offsetU();
-    				p++;
+	    	    }else{	//turno movimiento, solo si la celda a la que nos movemos esta disponible
+	    	    	p--;
+    				cell.undo_offsetU();	//desacemos el offset de la celda atual
+    				cell.setAllow(true);	//la desbloqueamos
+    				this.cell = evalCell;	//avanzamos a la siguiente celda
+    				cell.setAllow(false);	//la bloqueamos
+    				newImage(ID,"arriba_quieto.png",new Coor(0,0), p);//se actualiza la imagen, se usa la coordenada Y(p) para posicionar la imagen en la cola de renderizado
+    				anima = true;	//fin turno de movimiento
+    			}
+    		}else{	//si la celda no permite el movimiento a ella
+    			newImage(ID,"arriba_quieto.png",new Coor(0,0), p);//se actualiza la imagen, se usa la coordenada Y(p) para posicionar la imagen en la cola de renderizado
+    			anima = true;	//fin turno movimiento
+    			cell.undo_offsetU();	//desacemos offset
     		}
-    	}
-    	}
 	    }
 	    
 	    private synchronized void moveD(){
-	    	if(!anima)
-	    	p++;
-	    	if(p < 0){	//limite superior
-	    		p = 0;
-	    		anima = true;
-	    		cell.undo_offsetD();
-	    	}else{
-	    	if(p > (MaxMapY/Mapper.cellPixels)-1){	//limite inferior
-	    		p = (MaxMapY/Mapper.cellPixels)-1;
-	    	}else{
-	    		
-	    		Coor evalCell = map[o][p];
-    			if(anima){
-    				if(anim == 0){
-    					newImage(ID,"abajo_andando.png",new Coor(0,0), p);
-    					cell.offsetD();
-    					anima = false;
-    					anim++;
+	    	Coor evalCell = map[o][p+1];	//celda de evaluacion
+    		if(evalCell.isAllow()){
+    			if(anima){	//turno de la animacion
+    				if(anim == 0){	//alternando entre paso izquierdo y paso derecho
+    					newImage(ID,"abajo_andando.png",new Coor(0,0), p);//se actualiza la imagen, se usa la coordenada Y(p) para posicionar la imagen en la cola de renderizado
+    					cell.offsetD();	//offset a la celda actual para efecto de paso
+    					anima = false;	//turno de animacion finalizado
+    					anim++;	//alternando entre pasos
     				}else{
-    					newImage(ID,"abajo_andando2.png",new Coor(0,0), p);
-    					cell.offsetD();
-    					anima = false;
-    					anim--;
+    					newImage(ID,"abajo_andando2.png",new Coor(0,0), p);//se actualiza la imagen, se usa la coordenada Y(p) para posicionar la imagen en la cola de renderizado
+    					cell.offsetD();	//offset a la celda actual para efecto de paso
+    					anima = false;	//turno de animacion finalizado
+    					anim--; //alternando entre pasos
     				}
-	    	    }else if(evalCell.isAllow()){
-    				cell.undo_offsetD();
-    				cell.setAllow(true);
-    				this.cell = evalCell;
-    				cell.setAllow(false);
-    				newImage(ID,"abajo_quieto.png",new Coor(0,0), p);
-    				anima = true;
-    			}else{
-    				anima = true;
-    				cell.undo_offsetD();
-    				p--;
+	    	    }else{	//turno movimiento, solo si la celda a la que nos movemos esta disponible
+	    	    	p++;
+    				cell.undo_offsetD();	//desacemos el offset de la celda atual
+    				cell.setAllow(true);	//la desbloqueamos
+    				this.cell = evalCell;	//avanzamos a la siguiente celda
+    				cell.setAllow(false);	//la bloqueamos
+    				newImage(ID,"abajo_quieto.png",new Coor(0,0), p);//se actualiza la imagen, se usa la coordenada Y(p) para posicionar la imagen en la cola de renderizado
+    				anima = true;	//fin turno de movimiento
+    			}
+    		}else{	//si la celda no permite el movimiento a ella
+    			newImage(ID,"abajo_quieto.png",new Coor(0,0), p);//se actualiza la imagen, se usa la coordenada Y(p) para posicionar la imagen en la cola de renderizado
+    			anima = true;	//fin turno movimiento
+    			cell.undo_offsetD();	//desacemos offset
     		}
-    	}
-    	}
 	    }
 	    
 	    
@@ -388,12 +349,13 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    		Image b = a.getImage();
 	    		images.put(id, b);	//anadimos la nueva imagen al mapa de imagenes junto con su id
 	    		coors.put(id, position); //anadimos la posicion de la imagen junto con su id al mapa de posiciones
-	    		paintOrder.put(id, Y);
+	    		paintOrder.put(id, Y);	//añadimos la id de la imagen a la cola de renderizado, cuando mayor sea el valor de Y, mas tarde se dibujara respecto al resto de elementos
 	    }
 	    
 	    public void destroyImage(int id){
 	    	images.remove(id);
 	    	coors.remove(id);
+	    	paintOrder.remove(id);
 	    }
 
 		public void run() {		//loop principal, Frame
@@ -422,11 +384,11 @@ public class Board extends JPanel implements Runnable, ActionListener{
 			 * El metodo movimiento se ejecuta 2 veces, una para simular el paso del sprite, y la segunda para evaluar la siguiente posicion y reaccionar segun el resultado
 			 */
 			if(!(nextMov.equals(""))){	
-			if(animac){
+			if(animac){	//si es animacion:
 				move = nextMov;
 				move(move);	//ejecutamos el movimiento de la variable nextMov
 				animac = false;	//fin turno animacion
-			}else{
+			}else{	//si no es animacion:
 				move(move);	//ejecutamos el movimiento de la variable nextMov
 				mov("");	//reiniciamos la variable nextMov
 				animac = true;	//fin turno movimiento
@@ -434,7 +396,9 @@ public class Board extends JPanel implements Runnable, ActionListener{
 			}
 		}
 		
-		
+		/*
+		 * El siguiente metodo abre una ventana para seleccionar un archivo local, devuelve la ruta completa como un string
+		 */
 		public String loadImage(){
 			JFileChooser fc = new JFileChooser();
 
@@ -453,6 +417,10 @@ public class Board extends JPanel implements Runnable, ActionListener{
 		
 }
 
+
+/*
+ * La siguiente clase crea una barra de progreso en la esquina superior izquierda
+ */
 @SuppressWarnings("serial")
 class Progress_bar extends JFrame implements ActionListener{
 	JProgressBar current;
@@ -486,7 +454,9 @@ class Progress_bar extends JFrame implements ActionListener{
 	}
 }
 
-
+/*
+ * Con la siguiente clase ordenamos un mapa por el orden natural de sus valores
+ */
 @SuppressWarnings("rawtypes")
 class ValueComparator implements Comparator {
 
