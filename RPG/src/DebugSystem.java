@@ -27,7 +27,7 @@ public class DebugSystem extends JFrame implements ActionListener{
         setVisible(true);
         setResizable(false);
         b = new JTextArea(40,40);
-        b.setText("Controles de movimiento: WASD\nEliminar npc: R\nVer pixeles de coordenada: P\nCambiar estado de celda: C\nCambiar mapa: N\nCrear nuevo mapa: M");
+        b.setText("Controles de movimiento: WASD\nEliminar npc: R\nVer pixeles de coordenada actual: P\nCambiar estado de celda: C\nCambiar mapa: N\nCrear nuevo mapa: M");
         b.setVisible(true);
         // c = new JLabel("");
         ce.add(b);
