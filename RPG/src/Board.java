@@ -15,16 +15,20 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+import javax.swing.UIManager;
 
 @SuppressWarnings("serial")
 public class Board extends JPanel implements Runnable, ActionListener{
@@ -56,7 +60,7 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	
 	    public Board() {
 	    	setDoubleBuffered(true);	//se requiere un buffer de dibujo el cual se dibuja finalmente en pantalla (cuestiones menores de refresco de pantalla)
-	        
+	        try {UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());} catch (Exception e) {e.printStackTrace();}
 	        
 	        
 	        Map<Integer, Image> images3 = Collections.synchronizedSortedMap(new TreeMap<Integer, Image>()); 
@@ -83,12 +87,11 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    }
 	    
 	    public void create_map(){
-	    	new JFileChooser().showOpenDialog(this);
 	    	Map<Integer, Image> images3 = Collections.synchronizedSortedMap(new TreeMap<Integer, Image>()); 
 	        Map<Integer, Coor> coors3 = Collections.synchronizedSortedMap(new TreeMap<Integer, Coor>()); 
 	        int num_images = Integer.parseInt(JOptionPane.showInputDialog("Numero de imagenes: "));
 	        for(int i=0;i<num_images;i++){
-	        	ImageIcon a2 = new ImageIcon(JOptionPane.showInputDialog("Ruta de imagen: "));
+	        	ImageIcon a2 = new ImageIcon(loadImage());
 	        	Image b2 = a2.getImage();
 	        	int ID = Integer.parseInt(JOptionPane.showInputDialog("ID de imagen: "));
 	        	images3.put(ID, b2);
@@ -379,6 +382,22 @@ public class Board extends JPanel implements Runnable, ActionListener{
 				animac = true;	//fin turno movimiento
 			}
 			}
+		}
+		
+		
+		public String loadImage(){
+			JFileChooser fc = new JFileChooser();
+
+			fc.showOpenDialog(this);
+
+			File fileImagen = fc.getSelectedFile();
+
+			
+			if(fileImagen!=null){
+				return fileImagen.getAbsolutePath();
+	       }else{
+	    	   return null;
+	       }
 		}
 }
 
