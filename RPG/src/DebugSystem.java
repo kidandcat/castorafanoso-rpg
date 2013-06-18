@@ -1,9 +1,6 @@
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Iterator;
-import java.util.Set;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -37,10 +34,6 @@ public class DebugSystem extends JFrame implements ActionListener{
         try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
         timer.start();	//IMPORTANTE es aqui donde hay una baja probabilidad de error fatal si este metodo se ejecuta antes de la inicializacion del Board
         */
-        Set<Npc> u = Npc.list();
-		Iterator<Npc> it = u.iterator();
-		if(it.hasNext())
-		np = it.next();
 	}
 	
 	public void print_map(){

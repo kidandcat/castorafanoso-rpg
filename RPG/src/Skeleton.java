@@ -12,7 +12,6 @@ public class Skeleton extends JFrame implements KeyListener {
 	static DebugSystem db;
     public Skeleton(Board a) {
     	this.a = a;
-        add(a);		//anadimos el panel de graficos
         setTitle("Skeleton");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(SCREEN_X, SCREEN_Y);	
@@ -22,6 +21,7 @@ public class Skeleton extends JFrame implements KeyListener {
         setResizable(false);	
         addKeyListener(this);
         setFocusable(true);
+        add(a);		//anadimos el panel de graficos
     }
     
     /*
