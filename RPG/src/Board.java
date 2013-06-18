@@ -18,8 +18,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 import javax.swing.ImageIcon;
@@ -53,16 +58,19 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	private String nextMov = "";	//siguiente movimiento del personaje main
 	private Map<Integer, Image> images;
 	private Map<Integer, Coor> coors;
+	private int ID = 3;
 	Ia ia;
+	private SortedMap<Integer,Integer> paintOrder;
+	private Map<Integer,Integer> finalOrder;
 	/*METODOS*/
 	/*public synchronized boolean isEnd(){	legacy method
 			return end;
 		}*/
 	
 	    public Board() {
+	    	paintOrder = Collections.synchronizedSortedMap(new TreeMap<Integer, Integer>()); 
 	    	setDoubleBuffered(true);	//se requiere un buffer de dibujo el cual se dibuja finalmente en pantalla (cuestiones menores de refresco de pantalla)
 	        try {UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());} catch (Exception e) {e.printStackTrace();}
-	        
 	        
 	        Map<Integer, Image> images3 = Collections.synchronizedSortedMap(new TreeMap<Integer, Image>()); 
 	        Map<Integer, Coor> coors3 = Collections.synchronizedSortedMap(new TreeMap<Integer, Coor>()); 
@@ -74,12 +82,15 @@ public class Board extends JPanel implements Runnable, ActionListener{
 		    Image b1 = a1.getImage();
 		    images3.put(-2, b3);
 		    images3.put(-1, b2);
-		    images3.put(3, b1);
-		    coors3.put(3, new Coor(0,0));
+		    images3.put(ID, b1);
+		    paintOrder.put(-1, -1);
+		    paintOrder.put(-2, -2);
+		    paintOrder.put(ID, p);
+		    coors3.put(ID, new Coor(0,0));
 		    coors3.put(-1, new Coor(420,310));
 		    coors3.put(-2, new Coor(-300,-300));
 		    Coor[][] map3 = new Mapper(800,800,this).init();
-	        Mapp.constructor(1, 800, 800, images3, coors3, map3, 1, 20);
+	        Mapp.constructor(1, 800, 800, images3, coors3, map3, 1, 20, paintOrder);
 	        /*Nuevo metodo de limitacion de mapas*/ //Se bloquean las celdas exteriores del mapa
 	        
 	        changeMap(1);
@@ -91,18 +102,21 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    	try{
 	    	Map<Integer, Image> images3 = Collections.synchronizedSortedMap(new TreeMap<Integer, Image>()); 
 	        Map<Integer, Coor> coors3 = Collections.synchronizedSortedMap(new TreeMap<Integer, Coor>()); 
+	        SortedMap<Integer,Integer> paintOrder = Collections.synchronizedSortedMap(new TreeMap<Integer, Integer>()); 
 	        int num_images = Integer.parseInt(JOptionPane.showInputDialog("Numero de imagenes: "));
 	        for(int i=0;i<num_images;i++){
 	        	ImageIcon a2 = new ImageIcon(loadImage());
 	        	Image b2 = a2.getImage();
 	        	int ID = Integer.parseInt(JOptionPane.showInputDialog("ID de imagen: "));
 	        	images3.put(ID, b2);
+	        	int paintorder = Integer.parseInt(JOptionPane.showInputDialog("Prioridad de dibujado (aleatorio para Npc): "));
+	        	paintOrder.put(ID, paintorder);
 	        	coors3.put(ID, new Coor(Integer.parseInt(JOptionPane.showInputDialog("Coordenada X: ")),Integer.parseInt(JOptionPane.showInputDialog("Coordenada Y: "))));
 	        }
 	        int mapx = Integer.parseInt(JOptionPane.showInputDialog("Anchura del mapa: "));
 	        int mapy = Integer.parseInt(JOptionPane.showInputDialog("Altura del mapa: "));
 		    Coor[][] map3 = new Mapper(mapx,mapy,this).init();
-	        Mapp.constructor(Integer.parseInt(JOptionPane.showInputDialog("ID del mapa: ")), mapx, mapy, images3, coors3, map3, Integer.parseInt(JOptionPane.showInputDialog("X de inicio: ")), Integer.parseInt(JOptionPane.showInputDialog("Y de inicio: ")));
+	        Mapp.constructor(Integer.parseInt(JOptionPane.showInputDialog("ID del mapa: ")), mapx, mapy, images3, coors3, map3, Integer.parseInt(JOptionPane.showInputDialog("X de inicio: ")), Integer.parseInt(JOptionPane.showInputDialog("Y de inicio: ")), paintOrder);
 	    	}catch(Exception e){
 	    		JOptionPane.showMessageDialog(this, "Error creando mapa");
 	    		JOptionPane.showMessageDialog(this, e.getStackTrace());
@@ -118,6 +132,7 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    		Progress_bar bar = new Progress_bar();
 	    		bar.set(1);
 	    		this.coors = new_map.coors();
+	    		this.paintOrder = new_map.paintOrder();
 	    		bar.set(2);
 	    		this.MaxMapX = new_map.MaxMapX();
 	    		bar.set(3);
@@ -154,12 +169,13 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    
 	    public void paint(Graphics g) {		//pintado de pantalla, este metodo no se ejecuta por nosotros mismos, el sistema de graficos lo ejecuta cada vez que llamamos a repaint()
 	    	Graphics2D g2d = (Graphics2D) g;	//grafico actual
-	    	Iterator<Image> it = images.values().iterator();
-	    	Iterator<Coor> it2 = coors.values().iterator();
-	    	for(int i=0; i<images.size();i++){
-	    		Image a = it.next();
-	    		Coor d = it2.next();
-	    		if(!a.equals(images.get(3))){
+	    	finalOrder = ValueComparator.sortByValue(paintOrder);
+	    	Iterator<Integer> it3 = finalOrder.keySet().iterator();
+	    	for(int i=0; i<finalOrder.size();i++){
+	    		int l = it3.next();
+	    		Image a = images.get(l);
+	    		Coor d = coors.get(l);
+	    		if(!a.equals(images.get(ID))){
 	    			g2d.drawImage(a, cell.X()+d.X(), cell.Y()+d.Y(), null);
 	    		}else{
 	    			g2d.drawImage(a, 420, 310, null);
@@ -216,12 +232,12 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    		Coor evalCell = map[o][p];	//celda de evaluacion
 	    			if(anima){	//turno de la animacion
 	    				if(anim == 0){	//alternando entre paso izquierdo y paso derecho
-	    					newImage(3,"derecha_andando.png",new Coor(0,0));//se actualiza la imagen
+	    					newImage(ID,"derecha_andando.png",new Coor(0,0), p);//se actualiza la imagen
 	    					cell.offsetR();	//offset a la celda actual para efecto de paso
 	    					anima = false;	//turno de animacion finalizado
 	    					anim++;	//alternando entre pasos
 	    				}else{
-	    					newImage(3,"derecha_andando2.png",new Coor(0,0));//se actualiza la imagen
+	    					newImage(ID,"derecha_andando2.png",new Coor(0,0), p);//se actualiza la imagen
 	    					cell.offsetR();	//offset a la celda actual para efecto de paso
 	    					anima = false;	//turno de animacion finalizado
 	    					anim--; //alternando entre pasos
@@ -231,7 +247,7 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    				cell.setAllow(true);	//la desbloqueamos
 	    				this.cell = evalCell;	//avanzamos a la siguiente celda
 	    				cell.setAllow(false);	//la bloqueamos
-	    				newImage(3,"derecha_quieto.png",new Coor(0,0));//se actualiza la imagen
+	    				newImage(ID,"derecha_quieto.png",new Coor(0,0), p);//se actualiza la imagen
 	    				anima = true;	//fin turno de movimiento
 	    			}else{	//si la celda no permite el movimiento a ella
 	    				anima = true;	//fin turno movimiento
@@ -256,12 +272,12 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    			Coor evalCell = map[o][p];
 	    			if(anima){
 	    				if(anim == 0){
-	    					newImage(3,"izquierda_andando.png",new Coor(0,0));
+	    					newImage(ID,"izquierda_andando.png",new Coor(0,0), p);
 	    					cell.offsetL();
 	    					anima = false;
 	    					anim++;
 	    				}else{
-	    					newImage(3,"izquierda_andando2.png",new Coor(0,0));
+	    					newImage(ID,"izquierda_andando2.png",new Coor(0,0), p);
 	    					cell.offsetL();
 	    					anima = false;
 	    					anim--;
@@ -271,7 +287,7 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    				cell.setAllow(true);
 	    				this.cell = evalCell;
 	    				cell.setAllow(false);
-	    				newImage(3,"izquierda_quieto.png",new Coor(0,0));
+	    				newImage(ID,"izquierda_quieto.png",new Coor(0,0), p);
 	    				anima = true;
 	    			}else{
 	    				anima = true;
@@ -296,12 +312,12 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    		Coor evalCell = map[o][p];
     			if(anima){
     				if(anim == 0){
-    					newImage(3,"arriba_andando.png",new Coor(0,0));
+    					newImage(ID,"arriba_andando.png",new Coor(0,0), p);
     					cell.offsetU();
     					anima = false;
     					anim++;
     				}else{
-    					newImage(3,"arriba_andando2.png",new Coor(0,0));
+    					newImage(ID,"arriba_andando2.png",new Coor(0,0), p);
     					cell.offsetU();
     					anima = false;
     					anim--;
@@ -311,7 +327,7 @@ public class Board extends JPanel implements Runnable, ActionListener{
     				cell.setAllow(true);
     				this.cell = evalCell;
     				cell.setAllow(false);
-    				newImage(3,"arriba_quieto.png",new Coor(0,0));
+    				newImage(ID,"arriba_quieto.png",new Coor(0,0), p);
     				anima = true;
     			}else{
     				anima = true;
@@ -337,12 +353,12 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    		Coor evalCell = map[o][p];
     			if(anima){
     				if(anim == 0){
-    					newImage(3,"abajo_andando.png",new Coor(0,0));
+    					newImage(ID,"abajo_andando.png",new Coor(0,0), p);
     					cell.offsetD();
     					anima = false;
     					anim++;
     				}else{
-    					newImage(3,"abajo_andando2.png",new Coor(0,0));
+    					newImage(ID,"abajo_andando2.png",new Coor(0,0), p);
     					cell.offsetD();
     					anima = false;
     					anim--;
@@ -352,7 +368,7 @@ public class Board extends JPanel implements Runnable, ActionListener{
     				cell.setAllow(true);
     				this.cell = evalCell;
     				cell.setAllow(false);
-    				newImage(3,"abajo_quieto.png",new Coor(0,0));
+    				newImage(ID,"abajo_quieto.png",new Coor(0,0), p);
     				anima = true;
     			}else{
     				anima = true;
@@ -366,11 +382,12 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    
 	    
 	    
-	    public void newImage(int id, String file, Coor position){	//metodo para crear una nueva imagen
+	    public void newImage(int id, String file, Coor position, int Y){	//metodo para crear una nueva imagen
 	    		ImageIcon a = new ImageIcon(file);
 	    		Image b = a.getImage();
 	    		images.put(id, b);	//anadimos la nueva imagen al mapa de imagenes junto con su id
 	    		coors.put(id, position); //anadimos la posicion de la imagen junto con su id al mapa de posiciones
+	    		paintOrder.put(id, Y);
 	    }
 	    
 	    public void destroyImage(int id){
@@ -468,6 +485,44 @@ class Progress_bar extends JFrame implements ActionListener{
 	}
 }
 
+
+@SuppressWarnings("rawtypes")
+class ValueComparator implements Comparator {
+
+	  Map<Integer,Integer> base;
+	  public ValueComparator(Map<Integer,Integer> base) {
+	      this.base = base;
+	  }
+
+	  public int compare(Object a, Object b) {
+
+	    if((Integer)base.get(a) < (Integer)base.get(b)) {
+	      return 1;
+	    } else if((Integer)base.get(a) == (Integer)base.get(b)) {
+	      return 0;
+	    } else {
+	      return -1;
+	    }
+	  }
+	  
+	  @SuppressWarnings("unchecked")
+	static Map<Integer, Integer> sortByValue(Map map) {
+		     List list = new LinkedList(map.entrySet());
+		     Collections.sort(list, new Comparator() {
+		          public int compare(Object o1, Object o2) {
+		               return ((Comparable) ((Map.Entry) (o1)).getValue())
+		              .compareTo(((Map.Entry) (o2)).getValue());
+		          }
+		     });
+
+		    Map result = new LinkedHashMap();
+		    for (Iterator it = list.iterator(); it.hasNext();) {
+		        Map.Entry entry = (Map.Entry)it.next();
+		        result.put(entry.getKey(), entry.getValue());
+		    }
+		    return result;
+		}
+	}
 
 
 

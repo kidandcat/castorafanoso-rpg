@@ -1,6 +1,7 @@
 import java.awt.Image;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 
@@ -12,13 +13,14 @@ public class Mapp {
 	private int ID;
 	private static Map<Integer, Mapp> maps = null;
 	private Set<Npc> npcs = null;
+	private SortedMap<Integer,Integer> paintOrder;
 
-	public static void constructor(int ID, int dimensionX, int dimensionY, Map<Integer, Image> images, Map<Integer, Coor> coors, Coor[][] map, int initX, int initY){
+	public static void constructor(int ID, int dimensionX, int dimensionY, Map<Integer, Image> images, Map<Integer, Coor> coors, Coor[][] map, int initX, int initY, SortedMap<Integer,Integer> paintOrder){
 		if(maps != null){
-			Mapp mp = new Mapp(ID, dimensionX, dimensionY, images, coors, map, initX, initY);
+			Mapp mp = new Mapp(ID, dimensionX, dimensionY, images, coors, map, initX, initY, paintOrder);
 			maps.put(ID, mp);
 		}else{
-			Mapp mp = new Mapp(ID, dimensionX, dimensionY, images, coors, map, initX, initY);
+			Mapp mp = new Mapp(ID, dimensionX, dimensionY, images, coors, map, initX, initY, paintOrder);
 			maps = new TreeMap<Integer, Mapp>();
 			maps.put(ID, mp);
 		}
@@ -28,11 +30,12 @@ public class Mapp {
 		return maps.get(ID);
 	}
 	
-	private Mapp(int ID, int dimensionX, int dimensionY, Map<Integer, Image> images, Map<Integer, Coor> coors, Coor[][] map, int initX, int initY){
+	private Mapp(int ID, int dimensionX, int dimensionY, Map<Integer, Image> images, Map<Integer, Coor> coors, Coor[][] map, int initX, int initY, SortedMap<Integer,Integer> paintOrder){
 		this.MaxMapX = dimensionX;
     	this.MaxMapY = dimensionY;
     	this.ID = ID;
     	this.images = images;
+    	this.paintOrder = paintOrder;
     	this.coors = coors;
     	this.map = map;
     	this.o = initX;
@@ -62,6 +65,10 @@ public class Mapp {
 	
 	public Map<Integer, Coor> coors(){
 		return coors;
+	}
+	
+	public SortedMap<Integer, Integer> paintOrder(){
+		return paintOrder;
 	}
 
 	public Coor[][] map(){
