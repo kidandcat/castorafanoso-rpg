@@ -96,6 +96,7 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	        changeMap(1);
 	        ia = new Ia();
 	    	Npc.constructor(this, 4, MOVEMENT_SPEED, "copia", ia, 4, 20);
+	    	Npc.constructor(this, 5, MOVEMENT_SPEED, "copia", null, 4, 21);
 	    }
 	    
 	    public void create_map(){
@@ -510,8 +511,7 @@ class ValueComparator implements Comparator {
 		     List list = new LinkedList(map.entrySet());
 		     Collections.sort(list, new Comparator() {
 		          public int compare(Object o1, Object o2) {
-		               return ((Comparable) ((Map.Entry) (o1)).getValue())
-		              .compareTo(((Map.Entry) (o2)).getValue());
+		               return ((Comparable) ((Map.Entry) (o1)).getValue()).compareTo(((Map.Entry) (o2)).getValue());
 		          }
 		     });
 

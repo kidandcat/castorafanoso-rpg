@@ -51,6 +51,10 @@ public class Mapp {
 		return MaxMapX;
 	}
 	
+	public void setNPCList(Set<Npc> npcs){
+		this.npcs = npcs;
+	}
+	
 	public int MaxMapY(){
 		return MaxMapY;
 	}

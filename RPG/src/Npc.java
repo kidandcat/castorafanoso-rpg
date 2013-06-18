@@ -65,8 +65,10 @@ public class Npc implements ActionListener{
         timer.start();
         cell = a.map[o][p];
         a.map[o][p].setAllow(false);
-        ia.init(this);
-        ia.start();
+        if(ia != null){
+        	ia.init(this);
+        	ia.start();
+        }
 	}
 
 	
