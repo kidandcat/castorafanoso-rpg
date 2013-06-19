@@ -29,6 +29,7 @@ public class Skeleton extends JFrame implements KeyListener {
      */
     public static void main(String[] args) {
     	Board a = new Board();	//inicializacion graficos
+    	try {Thread.sleep(1000);} catch (InterruptedException e) {System.out.println("interrupted");} 	//dormimos el thread (controlamos el tiempo por frame)
     	db = new DebugSystem(a);		//inicializacion debugger
     	new Skeleton(a);		//inicializacion ventana
     	//JOptionPane.showMessageDialog(null, "Controles de movimiento: WASD\nEliminar npc: R\nVer pixeles de coordenada: P\nCambiar estado de celda: C\nCambiar mapa: N\nCrear nuevo mapa: M");
