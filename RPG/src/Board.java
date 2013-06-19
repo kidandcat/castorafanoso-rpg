@@ -87,7 +87,7 @@ public class Board extends JPanel implements Runnable, ActionListener{
 		    paintOrder.put(-2, -2);
 		    paintOrder.put(ID, p);
 		    coors3.put(ID, new Coor(0,0));
-		    coors3.put(-1, new Coor(420,310));
+		    coors3.put(-1, new Coor(420,310+5));
 		    coors3.put(-2, new Coor(-300,-300));
 		    Coor[][] map3 = new Mapper(800,800,this).init();
 	        Mapp.constructor(1, 800, 800, images3, coors3, map3, 1, 20, paintOrder);
