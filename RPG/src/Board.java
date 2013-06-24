@@ -165,6 +165,9 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    		this.p = new_map.init_Y();
 	    		this.cell = map[o][p];
 	    		Npc.set_list(new_map.npcs());
+	    		if(Npc.list() != null)
+	    			for(Npc npc : Npc.list())
+	    				npc.unpause();
 	    }
 	    
 	    
@@ -203,7 +206,7 @@ public class Board extends JPanel implements Runnable, ActionListener{
 		   this.nextMov = d;
 	   }
 	    
-	   private void move(String s){	//inicia los metodos necesarios para moverse en la direccion indicada;
+	   private synchronized void move(String s){	//inicia los metodos necesarios para moverse en la direccion indicada;
 		   switch(s){
 		   case "R": moveR();
 		   break;

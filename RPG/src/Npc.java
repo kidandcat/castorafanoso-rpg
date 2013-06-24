@@ -20,6 +20,7 @@ public class Npc implements ActionListener{
 	private int anim = 0;
 	private Timer timer;
 	private static Set<Npc> npcs = null;	//set estatico donde se almacenan todos los npcs para su localizacion (a implementar: una id por npc para poder localizarlos en el set(cambiar el set por un mapa))
+	private boolean pause = false;
 	
 	public static Npc constructor(Board a, int ID, int MOVEMENT_SPEED, String i, Ia ia, int initX, int initY){
 		if(npcs != null){
@@ -39,6 +40,14 @@ public class Npc implements ActionListener{
 	
 	public static void set_list(Set<Npc> npcs){
 		Npc.npcs = npcs;
+	}
+	
+	public void pause(){
+		pause = true;
+	}
+	
+	public void unpause(){
+		pause = false;
 	}
 	
 	public void destroy(){
@@ -73,6 +82,7 @@ public class Npc implements ActionListener{
 
 	
 	public synchronized void mov(String d){	//actualiza la variable de movimiento
+		if(!pause)
 		   this.nextMov = d;
 	}
 	

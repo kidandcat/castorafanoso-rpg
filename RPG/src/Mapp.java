@@ -1,4 +1,5 @@
 import java.awt.Image;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
@@ -41,6 +42,12 @@ public class Mapp {
     	this.o = initX;
     	this.p = initY;
     	npcs = Npc.list();
+    	if(Npc.list() != null){
+    		Iterator<Npc> it = Npc.list().iterator();
+    		while(it.hasNext()){
+    			it.next().pause();
+    		}
+    	}
     	Npc.set_list(null);
 	}
 	public Set<Npc> npcs(){
