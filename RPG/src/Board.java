@@ -220,7 +220,7 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	   }
 	   
 	    private synchronized void moveR(){	//movimientos y control de limites de mapa (despues de una enorme rayada mental, todos los bordes limitados y celdas notAllow en funcionamiento)
-	    	/*debido al nuevo metodo de limite de mapa, las comprobaciones (o<0) y (o > (MaxMapX/Mapper.cellPixels)-1) quedan fuera de uso, pero permaneceran por la dificultad de limpiar todo el codigo*/
+	    	/*debido al nuevo metodo de limite de mapa, las comprobaciones (o<0) y (o > (MaxMapX/Mapper.cellPixels)-1) quedan fuera de uso*/
 	    		Coor evalCell = map[o+1][p];	//celda de evaluacion
 	    		if(evalCell.isAllow()){
 	    			if(anima){	//turno de la animacion
@@ -352,7 +352,7 @@ public class Board extends JPanel implements Runnable, ActionListener{
 	    		Image b = a.getImage();
 	    		images.put(id, b);	//anadimos la nueva imagen al mapa de imagenes junto con su id
 	    		coors.put(id, position); //anadimos la posicion de la imagen junto con su id al mapa de posiciones
-	    		paintOrder.put(id, Y);	//añadimos la id de la imagen a la cola de renderizado, cuando mayor sea el valor de Y, mas tarde se dibujara respecto al resto de elementos
+	    		paintOrder.put(id, Y);	//anadimos la id de la imagen a la cola de renderizado, cuando mayor sea el valor de Y, mas tarde se dibujara respecto al resto de elementos
 	    }
 	    
 	    public void destroyImage(int id){
@@ -422,7 +422,7 @@ public class Board extends JPanel implements Runnable, ActionListener{
 
 
 /*
- * La siguiente clase crea una barra de progreso en la esquina superior izquierda
+ * La siguiente clase crea una barra de progreso
  */
 @SuppressWarnings("serial")
 class Progress_bar extends JFrame implements ActionListener{
